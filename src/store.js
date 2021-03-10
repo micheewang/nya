@@ -1,56 +1,29 @@
-'use strict';
-import { copy } from './tool';
+import { Goods } from './goods';
+import { Truck } from './truck';
 
-export const RESPONSIVE_VALUE = Symbol('store.value');
-export const RESPONSIVE_CALL = Symbol('store.call');
-
-export function createStore(value) {
-  return new Store(value);
+export function createStore(...arg) {
+  return new Store(...arg);
 }
 
-export function isStore(con) {
-  return con instanceof Store;
-}
-
-class Store {
-  constructor(value) {
-    this[RESPONSIVE_VALUE] = copy(value);
-    this[RESPONSIVE_CALL] = {};
+export class Store {
+  /**
+   *
+   * @param {Truck} 
+   */
+  constructor(truck) {
+    this.truck = truck;
+    this.goods = {};
   }
 
   /**
    *
-   * @param {string|symbol} action
-   * @param {any} value
-   * @param {Array|undefined} diff
+   * @param {Goods} goods
    */
-  dispatch(action, newValue) {
-    var that = this;
-    let callList = this[RESPONSIVE_CALL];
-    let actionFn = callList[action];
-    if (actionFn) {
-      actionFn.forEach(function (callback) {
-        callback.call(that, newValue);
-      });
-    }
+  addGoods(goodsName, goods) {
+    this.goods[goodsName] = goods;
   }
 
-  addAction(actionName, action) {
-    if (typeof action === 'function') {
-      let callList = this[RESPONSIVE_CALL];
-      let actionList = (callList[actionName] = callList[actionName] || []);
-      actionList.unshift(action);
-    } else {
-      throw new Error('Action must be a function!');
-    }
-  }
-
-  //TODO
-  __collect__(){
-
-  }
-
-  __collectEnd__(){
-
+  present(goodsName) {
+    this.car(this.goods[goodsName]);
   }
 }

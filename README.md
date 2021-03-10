@@ -1,1 +1,1 @@
-# some thing come soon.
+# coming soon.

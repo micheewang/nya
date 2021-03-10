@@ -6,33 +6,44 @@
     <title>nya</title>
   </head>
 
-  <body></body>
+  <body>
+    <div id="root"></div>
+  </body>
   <script>
-
-    const { createStore, TAG, createComponent } = nya;
+    const { createGoods, TAG, createComponent, renderDOM } = nya;
 
     let { Div } = TAG;
 
-    let store = createStore({ class: 'frist' });
+    let goods = createGoods({ class: 'frist' });
 
     //extends
-    let Demo = createComponent(({ slot, props, store }) => {
+    let Component1 = createComponent(({ slot, props, store }) => {
       return Div({ class: store.class, title: props.title }, [
         Div('this is the ' + store.class + ' children.'),
         slot[0],
         slot[1],
+        slot[2],
       ]);
-    }, store);
+    }, goods);
+
+    let Component2 = createComponent(({ slot }) =>
+      Div(['this is', slot[0], ' component2'])
+    );
 
     // string slot | props | element slot
-    let demo2 = Div({ title: '外层div' }, [
-      Demo(
+    let demo2 = Div({ title: 'outer-div' }, [
+      Component1(
         {
-          title: 'this is props',
+          title: 'test props',
         },
-        ['this is demo3', Div('test element slot')]
+        [
+          'test string slot',
+          Div('test element slot Component2'),
+          Component2(' slot'),
+        ]
       ),
+      Component2(' normal'),
     ]);
-    document.body.append(demo2.render());
+    renderDOM(demo2, document.getElementById('root'));
   </script>
 </html>
