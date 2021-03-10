@@ -1,0 +1,38 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nya</title>
+  </head>
+
+  <body></body>
+  <script>
+
+    const { createStore, TAG, createComponent } = nya;
+
+    let { Div } = TAG;
+
+    let store = createStore({ class: 'frist' });
+
+    //extends
+    let Demo = createComponent(({ slot, props, store }) => {
+      return Div({ class: store.class, title: props.title }, [
+        Div('this is the ' + store.class + ' children.'),
+        slot[0],
+        slot[1],
+      ]);
+    }, store);
+
+    // string slot | props | element slot
+    let demo2 = Div({ title: '外层div' }, [
+      Demo(
+        {
+          title: 'this is props',
+        },
+        ['this is demo3', Div('test element slot')]
+      ),
+    ]);
+    document.body.append(demo2.render());
+  </script>
+</html>
