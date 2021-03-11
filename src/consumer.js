@@ -68,7 +68,6 @@ function isNotObject(v) {
   return typeof v !== 'object';
 }
 
-// runtime optimization
 //data diff
 function getDiff(obj1, obj2, path = []) {
   let diff = [];

@@ -1,5 +1,4 @@
 import { Goods } from './goods';
-import { Truck } from './truck';
 
 export function createStore(...arg) {
   return new Store(...arg);
@@ -10,41 +9,51 @@ export class Store {
    *
    * @param {Truck}
    */
-  constructor(truck, goods) {
+  constructor(goods, channel) {
     /**
-     *
-     */
-    this.truck = truck;
-    /**
-     *
+     * store
      */
     this.goods = goods || {};
+
     /**
-     * async or sync get good
+     * async or sync get goods
      */
-    this.channel = {};
+    this.channel = channel || {};
   }
 
-  addChannel(goodName, func) {
+  /**
+   *
+   * @param {stirng} goodsName
+   * @param {Function} func
+   */
+  addChannel(goodsName, func) {
     if (typeof func !== 'function') {
       throw new TypeError('channel must be a function.');
     }
-    this.channel[goodName] = func;
-  }
-  /**
-   *
-   * @param {Goods} goods
-   */
-  addGoods(goodName, goods) {
-    this.goods[goodName] = goods;
+    this.channel[goodsName] = func;
   }
 
-  present(goodName) {
+  /**
+   *
+   * @param {stirng} goodsName
+   * @param {Goods} goods
+   */
+  addGoods(goodsName, goods) {
+    this.goods[goodsName] = goods;
+  }
+
+  /**
+   *
+   * @param {string | symbol} goodsName
+   * @param {Function} call
+   */
+  getGoods(goodsName, call) {
     let { goods, channel } = this;
-    if (Object.hasOwnProperty.call(goods, goodName)) {
-      this.truck(this.goods[goodsName]);
-    } else if (Object.hasOwnProperty.call(channel, goodName)) {
-      channel((good) => this.truck((goods[goodName] = good)));
+    let hasOwnProperty = Object.hasOwnProperty;
+    if (hasOwnProperty.call(goods, goodsName)) {
+      call(this.goods[goodsName]);
+    } else if (hasOwnProperty.call(channel, goodsName)) {
+      channel[goodsName]((good) => call((goods[goodsName] = good)));
     }
   }
 }

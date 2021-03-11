@@ -4,8 +4,9 @@ import { Market } from './market';
 
 export class Supermarket extends Market {
   constructor(tagName, props, slot, dep, goods) {
-    super(tagName, props, slot, goods);
+    super(tagName, props, slot );
     this.dep = dep;
+    this.goods = goods;
     this.ref = null;
   }
 }

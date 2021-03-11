@@ -48,4 +48,19 @@
     ]);
     renderDOM(demo2, document.getElementById('root'));
   </script>
+  <script>
+    // test truck
+    var truck = nya.createTruck();
+    //set
+    var send = truck.sendGoods();
+    truck.sendCallback(function () {
+      send({ goods: 'goods' });
+    });
+
+    ///get
+    var get = truck.getGoods();
+    truck.getCallback(function (goods) {
+      console.log(goods);
+    });
+  </script>
 </html>

@@ -1,7 +1,7 @@
 'use strict';
 
 export class Market {
-  constructor(tagName, attrs, children, goods) {
+  constructor(tagName, attrs, children ) {
     if (typeof attrs === 'string' || isMarket(attrs)) {
       children = [attrs];
       attrs = {};
@@ -19,9 +19,9 @@ export class Market {
 
     this.tagName = tagName;
     this.ref = null;
-    this.truck = null;
-    this.goods = goods || null;
-    this.mark = {};
+
+    //TODO runtime optimization
+    this.mark = [];
     this.attrs = attrs;
     this.children = children;
   }
@@ -30,9 +30,9 @@ export class Market {
 export function isMarket(con) {
   return con instanceof Market;
 }
-export function createMarket(tagName, attrs, children, goods) {
+
+export function createMarket(tagName, attrs, children) {
   let con = new Market(tagName, attrs, children);
-  con.goods = goods;
   return con;
 }
 

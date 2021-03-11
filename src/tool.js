@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 export function copy(v) {
   let type = typeof v;
-  if (type === "object") {
+  if (type === 'object') {
     if (Array.isArray(v)) {
       return v.map((v) => copy(v));
     } else {
@@ -14,5 +14,13 @@ export function copy(v) {
     }
   } else {
     return v;
+  }
+}
+
+export function noop() {}
+
+export function testFuntion(a, msg) {
+  if (typeof a !== 'function') {
+    throw new TypeError(msg || 'Parameter must be a function.');
   }
 }
