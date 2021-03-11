@@ -1,14 +1,19 @@
 'use strict';
 import { createGoods } from './goods';
-import { TAG } from './market';
+import { TAG, createMarket } from './market';
 import { createSupermarket } from './supermarket';
-import { LIFE_CYCLE } from './action';
 import { renderDOM } from './consumer';
+import lifecycle from './lifecycle';
+import { createStore } from './store';
+import { createTruck } from './truck';
 
 window.nya = {
   createGoods,
-  createComponent:createSupermarket,
+  createEl: createMarket,
+  createComponent: createSupermarket,
   renderDOM,
-  lifeCycle: LIFE_CYCLE,
+  createStore,
+  createTruck,
+  lifecycle,
   TAG,
 };

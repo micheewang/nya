@@ -3,10 +3,9 @@
 import { Market } from './market';
 
 export class Supermarket extends Market {
-  constructor(tagName, props, slot, dep, store) {
-    super(tagName, props, slot);
+  constructor(tagName, props, slot, dep, goods) {
+    super(tagName, props, slot, goods);
     this.dep = dep;
-    this.store = store;
     this.ref = null;
   }
 }
@@ -23,9 +22,9 @@ export function isSupermarket(con) {
   return con instanceof Supermarket;
 }
 
-export function createSupermarket(dep, store) {
+export function createSupermarket(dep, goods) {
   if (typeof dep !== 'function') {
     throw new Error('is not function');
   }
-  return curryArgs(dep, store || null);
+  return curryArgs(dep, goods);
 }

@@ -1,5 +1,5 @@
 'use strict';
-export const LIFE_CYCLE =  {
+export default {
   created: Symbol('created'),
   mount: Symbol('mount'),
   beforeUpdate: Symbol('beforeUpdate'),

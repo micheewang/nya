@@ -10,16 +10,17 @@ import { Goods } from './goods';
  */
 export function renderDOM(market, root) {
   if (isMarket(market)) {
-    let el;
-    if (isSupermarket(market)) {
-      el = supermarketRender.call(market);
-    } else {
-      el = marketRender.call(market);
-    }
+    let el = whichRender(market)();
     root.appendChild(el);
   } else {
     throw new Error(`The root element must mount the component.`);
   }
+}
+
+function whichRender(market) {
+  return isSupermarket(market)
+    ? supermarketRender.bind(market)
+    : marketRender.bind(market);
 }
 
 function marketRender() {
@@ -42,11 +43,7 @@ function marketRender() {
     }
     let el = null;
     if (isMarket(market)) {
-      if (isSupermarket(market)) {
-        el = supermarketRender.call(market);
-      } else {
-        el = marketRender.call(market);
-      }
+      el = whichRender(market)();
     } else {
       el = document.createTextNode(market);
     }
@@ -60,9 +57,11 @@ function supermarketRender() {
   let renderData = {
     props: this.attrs,
     slot: this.children,
-    store: this.store,
+    data: this.goods,
   };
-  return (this.ref = marketRender.call(this.dep(renderData)));
+
+  let depCon = this.dep(renderData);
+  return (this.ref = marketRender.call(depCon));
 }
 
 function isNotObject(v) {
