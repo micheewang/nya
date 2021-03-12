@@ -2,7 +2,6 @@
 
 import { Supermarket, isSupermarket } from './supermarket';
 import { Market, isMarket } from './market';
-import { Goods } from './goods';
 
 /**
  *
@@ -57,13 +56,16 @@ function supermarketRender() {
   let renderData = {
     props: this.attrs,
     slot: this.children,
-    data: this.goods,
+    data: this.getter(),//dep
   };
 
-  let depCon = this.dep(renderData);
-  return (this.ref = marketRender.call(depCon));
+  let con = this.templet(renderData);
+  return (this.ref = marketRender.call(con));
 }
 
+
+
+//TODO
 function isNotObject(v) {
   return typeof v !== 'object';
 }

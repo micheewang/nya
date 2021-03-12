@@ -15,21 +15,29 @@
 
     let { Div } = TAG;
 
-    let goods = createGoods({ class: 'frist' });
+    let size = 0;
+    let goods = {
+      get class() {
+        return 'class' + size++;
+      },
+    };
 
     //extends
-    let Component1 = createComponent(({ slot, props, data }) => {
-      return Div({ class: data.class, title: props.title }, [
-        Div('this is the ' + data.class + ' children.'),
-        slot[0],
-        slot[1],
-        slot[2],
-      ]);
-    }, goods);
+    let Component1 = createComponent(
+      ({ slot, props, data }) =>
+        Div({ class: data.class, title: props.title }, [
+          Div('this is the ' + data.class + ' children.'),
+          slot[0],
+          slot[1],
+          slot[2],
+        ]),
+      () => goods
+    );
 
     let Component2 = createComponent(
-      ({ slot }) => Div(['this is', slot[0], ' component2']),
-      goods
+      ({ slot, data }) => Div(['this is', slot[0], data.class, ' component2']),
+      () => goods,
+      () => {}
     );
 
     // string slot | props | element slot
@@ -46,20 +54,22 @@
       ),
       Component2(' normal'),
     ]);
+
     renderDOM(demo2, document.getElementById('root'));
   </script>
   <script>
     // test truck
     var truck = nya.createTruck();
     //set
-    var send = truck.sendGoods();
-    truck.sendCallback(function () {
-      send({ goods: 'goods' });
+    truck.setAnswer(function (name) {
+      setTimeout(() => {
+        this.send({ goods: 'goods' });
+      }, 2000);
     });
 
     ///get
-    var get = truck.getGoods();
-    truck.getCallback(function (goods) {
+    var get = truck.get;
+    truck.setReceive(function (goods) {
       console.log(goods);
     });
   </script>

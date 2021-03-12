@@ -20,7 +20,11 @@ export function copy(v) {
 export function noop() {}
 
 export function testFuntion(a, msg) {
-  if (typeof a !== 'function') {
+  if (!isFunction(a)) {
     throw new TypeError(msg || 'Parameter must be a function.');
   }
+}
+
+export function isFunction(f) {
+  return typeof f === 'function';
 }

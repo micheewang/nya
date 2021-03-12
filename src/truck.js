@@ -1,59 +1,53 @@
 import { noop, testFuntion } from './tool';
 
-export function createTruck() {
-  return new Truck();
-}
+//private
+const get = Symbol('Truck.Send'),
+  send = Symbol('Truck.Send');
 
-const getGoods = Symbol('Truck.GetGoods');
-const sendGoods = Symbol('Truck.SendGoods');
-const set = Symbol('Truck.Set');
-const get = Symbol('Truck.Get');
-const setPhone = Symbol('Truck.phone');
-const getPhone = Symbol('Truck.phone');
+const sendHandler = Symbol('Truck.Send'),
+  getHandler = Symbol('Truck.Get');
 
 //TODO timestamp limit
 export class Truck {
   constructor() {
-    this[get] = new Set();
-    this[set] = noop;
+    this[getHandler] = new Set();
+    this[sendHandler] = noop;
+    this.get = (goodsName) => {
+      this[get](goodsName);
+    };
+    this.send = (goods) => {
+      this[send](goods);
+    };
   }
 
-  sendCallback(func) {
+  setAnswer(func) {
     testFuntion(func);
-    if(this[set] !== noop){
-      console.warn('The output function is unique, and the previously set function will be cancelled.')
+    if (this[sendHandler] !== noop) {
+      console.warn(
+        'The output function is unique, and the previously send function will be cancelled.'
+      );
     }
-    this[set] = func;
+    this[sendHandler] = func;
   }
 
-  getCallback(func) {
+  setReceive(func) {
     testFuntion(func);
-    this[get].add(func);
+    this[getHandler].add(func);
   }
 
-  getGoods() {
-    return this[getPhone]
-      ? this[getPhone]
-      : (this[getPhone] = (goodsName) => {
-          this[getGoods](goodsName);
-        });
+  unbind(func) {}
+
+  [get](goodsName) {
+    this[sendHandler].call(this, goodsName);
   }
 
-  sendGoods() {
-    return this[setPhone]
-      ? this[setPhone]
-      : (this[setPhone] = (goods) => {
-          this[sendGoods](goods);
-        });
-  }
-
-  [getGoods](goodsName) {
-    this[set](goodsName);
-  }
-
-  [sendGoods](goods) {
-    this[get].forEach((callback) => {
-      callback(goods);
+  [send](goods) {
+    this[getHandler].forEach((callback) => {
+      callback.call(this, goods);
     });
   }
+}
+
+export function createTruck() {
+  return new Truck();
 }

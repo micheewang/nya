@@ -20,7 +20,7 @@ export class Market {
     this.tagName = tagName;
     this.ref = null;
 
-    //TODO runtime optimization
+    //runtime optimization
     this.mark = [];
     this.attrs = attrs;
     this.children = children;

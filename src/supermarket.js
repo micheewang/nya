@@ -1,13 +1,13 @@
 'use strict';
 
 import { Market } from './market';
+import { isFunction, testFuntion } from './tool';
 
 export class Supermarket extends Market {
-  constructor(tagName, props, slot, dep, goods) {
-    super(tagName, props, slot );
-    this.dep = dep;
-    this.goods = goods;
-    this.ref = null;
+  constructor(tagName, props, slot, templet, getter) {
+    super(tagName, props, slot);
+    this.templet = templet;
+    this.getter = isFunction(getter) ? getter : () => getter;
   }
 }
 
@@ -23,9 +23,7 @@ export function isSupermarket(con) {
   return con instanceof Supermarket;
 }
 
-export function createSupermarket(dep, goods) {
-  if (typeof dep !== 'function') {
-    throw new Error('is not function');
-  }
-  return curryArgs(dep, goods);
+export function createSupermarket(templet, ...args) {
+  testFuntion(templet);
+  return curryArgs(templet, ...args);
 }

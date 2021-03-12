@@ -1,4 +1,4 @@
-import { Goods } from './goods';
+import { testFuntion } from './tool';
 
 export function createStore(...arg) {
   return new Store(...arg);
@@ -27,9 +27,7 @@ export class Store {
    * @param {Function} func
    */
   addChannel(goodsName, func) {
-    if (typeof func !== 'function') {
-      throw new TypeError('channel must be a function.');
-    }
+    testFuntion(func);
     this.channel[goodsName] = func;
   }
 
