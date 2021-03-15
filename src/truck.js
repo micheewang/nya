@@ -1,13 +1,12 @@
 import { noop, testFuntion } from './tool';
 
 //private
-const get = Symbol('Truck.Send'),
-  send = Symbol('Truck.Send');
+const get = Symbol('truck.get'),
+  send = Symbol('truck.send');
 
-const sendHandler = Symbol('Truck.Send'),
-  getHandler = Symbol('Truck.Get');
+const sendHandler = Symbol('truck.send.handler'),
+  getHandler = Symbol('truck.get.handler');
 
-//TODO timestamp limit
 export class Truck {
   constructor() {
     this[getHandler] = new Set();
@@ -35,9 +34,16 @@ export class Truck {
     this[getHandler].add(func);
   }
 
-  unbind(func) {}
+  unbind(func) {
+    if (this[getHandler].has(func)) {
+      this[getHandler].delete(func);
+    }
+  }
 
   [get](goodsName) {
+    if (this[sendHandler] === noop) {
+      console.warn('No provider can provide data');
+    }
     this[sendHandler].call(this, goodsName);
   }
 

@@ -1,8 +1,8 @@
 'use strict';
 
-export class Market {
+export class $Element {
   constructor(tagName, attrs, children ) {
-    if (typeof attrs === 'string' || isMarket(attrs)) {
+    if (typeof attrs === 'string' || isElement(attrs)) {
       children = [attrs];
       attrs = {};
     } else if (Array.isArray(attrs)) {
@@ -27,12 +27,12 @@ export class Market {
   }
 }
 
-export function isMarket(con) {
-  return con instanceof Market;
+export function isElement(con) {
+  return con instanceof $Element;
 }
 
-export function createMarket(tagName, attrs, children) {
-  let con = new Market(tagName, attrs, children);
+export function createElement(tagName, attrs, children) {
+  let con = new $Element(tagName, attrs, children);
   return con;
 }
 
@@ -43,7 +43,7 @@ export const TAG = Proxy
         get(obj, prop) {
           if (!obj.hasOwnProperty(prop)) {
             obj[prop] = function (attrs, children) {
-              return new Market(prop, attrs, children);
+              return new $Element(prop, attrs, children);
             };
           }
           return obj[prop];
@@ -69,7 +69,7 @@ export const TAG = Proxy
         contain[
           tagName.slice(0, 1).toUpperCase() + tagName.slice(1)
         ] = function (attrs, children) {
-          return new Market(tagName, attrs, children);
+          return new $Element(tagName, attrs, children);
         };
       });
       return contain;

@@ -11,7 +11,7 @@
   </body>
   <script>
     console.log(nya);
-    const { createGoods, TAG, createComponent, renderDOM } = nya;
+    const { TAG, createComponent, renderDOM, useChapter } = nya;
 
     let { Div } = TAG;
 
@@ -23,22 +23,21 @@
     };
 
     //extends
-    let Component1 = createComponent(
-      ({ slot, props, data }) =>
-        Div({ class: data.class, title: props.title }, [
-          Div('this is the ' + data.class + ' children.'),
+    let Component1 = createComponent(() => {
+      let [value, setValue] = useChapter({ class: 'class', title: 'no title' });
+      return ({ slot, props }) =>
+        Div({ class: value.class, title: value.title }, [
+          Div('this is the ' + value.class + ' children.'),
           slot[0],
           slot[1],
           slot[2],
-        ]),
-      () => goods
-    );
+        ]);
+    });
 
-    let Component2 = createComponent(
-      ({ slot, data }) => Div(['this is', slot[0], data.class, ' component2']),
-      () => goods,
-      () => {}
-    );
+    let Component2 = createComponent(() => {
+      let data = goods;
+      return ({ slot }) => Div(['this is', slot[0], data.class, ' component2']);
+    });
 
     // string slot | props | element slot
     let demo2 = Div({ title: 'outer-div' }, [

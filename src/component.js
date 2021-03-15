@@ -1,9 +1,9 @@
 'use strict';
 
-import { Market } from './market';
+import { $Element } from './element';
 import { isFunction, testFuntion } from './tool';
 
-export class Supermarket extends Market {
+export class Component extends $Element {
   constructor(tagName, props, slot, templet, getter) {
     super(tagName, props, slot);
     this.templet = templet;
@@ -12,18 +12,18 @@ export class Supermarket extends Market {
 }
 
 function curryArgs(...args) {
-  //These supermarket belong to one type.
-  const name = Symbol('Supermarket');
+  //These component belong to one type.
+  const name = Symbol('Component');
   return function (props, slot) {
-    return new Supermarket(name, props, slot, ...args);
+    return new Component(name, props, slot, ...args);
   };
 }
 
-export function isSupermarket(con) {
-  return con instanceof Supermarket;
+export function isComponent(con) {
+  return con instanceof Component;
 }
 
-export function createSupermarket(templet, ...args) {
+export function createComponent(templet, ...args) {
   testFuntion(templet);
   return curryArgs(templet, ...args);
 }

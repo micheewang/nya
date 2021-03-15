@@ -1,28 +1,50 @@
 'use strict';
 
-import { Supermarket, isSupermarket } from './supermarket';
-import { Market, isMarket } from './market';
+import { Component, isComponent } from './component';
+import { $Element, isElement } from './element';
+
+const current_node = {
+  current: null,
+};
+
+export function getInstance() {
+  return current_node;
+}
+
+const renderQueen = [];
 
 /**
  *
- * @param {Market | Supermarket} market
+ * @param {Component} component
  */
-export function renderDOM(market, root) {
-  if (isMarket(market)) {
-    let el = whichRender(market)();
+export function addQueen(component) {
+  this.renderQueen.push({
+    timestamp: +new Date(),
+    component: component,
+  });
+}
+
+/**
+ *
+ * @param {$Element | Component} element
+ */
+export function renderDOM(element, root) {
+  if (isElement(element)) {
+    let el = whichRender(element)();
     root.appendChild(el);
   } else {
     throw new Error(`The root element must mount the component.`);
   }
 }
 
-function whichRender(market) {
-  return isSupermarket(market)
-    ? supermarketRender.bind(market)
-    : marketRender.bind(market);
+function whichRender(element) {
+  return isComponent(element)
+    ? ComponentRender.bind(element)
+    : elementRender.bind(element);
 }
 
-function marketRender() {
+function elementRender() {
+  current_node.current = null;
   let { tagName, attrs, children } = this;
   const ref = (this.ref = document.createElement(tagName));
 
@@ -35,16 +57,16 @@ function marketRender() {
     }
   }
 
-  for (let market of children) {
-    //don't render when market is [undefined,null,''].
-    if (market === undefined || market === null || market === '') {
+  for (let element of children) {
+    //don't render when element is [undefined,null,''].
+    if (element === undefined || element === null || element === '') {
       continue;
     }
     let el = null;
-    if (isMarket(market)) {
-      el = whichRender(market)();
+    if (isElement(element)) {
+      el = whichRender(element)();
     } else {
-      el = document.createTextNode(market);
+      el = document.createTextNode(element);
     }
     ref.appendChild(el);
   }
@@ -52,18 +74,16 @@ function marketRender() {
   return ref;
 }
 
-function supermarketRender() {
+function ComponentRender() {
   let renderData = {
     props: this.attrs,
     slot: this.children,
-    data: this.getter(),//dep
+    data: this.getter(), //dep
   };
-
-  let con = this.templet(renderData);
-  return (this.ref = marketRender.call(con));
+  current_node.current = this;
+  let con = this.templet()(renderData);
+  return (this.ref = elementRender.call(con));
 }
-
-
 
 //TODO
 function isNotObject(v) {
