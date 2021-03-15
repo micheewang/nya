@@ -43,7 +43,7 @@ let pause = false;
  *
  */
 function startClearQueen() {
-  while (renderQueen.length > 0 && !pause) {
+  if (!pause) {
     pause = true;
     requestAnimationFrame(function () {
       pause = false;
@@ -138,3 +138,4 @@ function componentRender() {
   let con = templet(renderData);
   return (this.ref = elementRender.call(con));
 }
+
