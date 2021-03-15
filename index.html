@@ -15,16 +15,18 @@
 
     let { Div, Button } = TAG;
 
-    let store = {
-      idx: 0,
-    };
     let truck = createTruck();
-    truck.setAnswer(function () {
-      this.send(store);
-    });
-    truck.setReceive(function (newStore) {
-      store = newStore;
-    });
+    (function () {
+      let store = {
+        idx: 0,
+      };
+      truck.setAnswer(function () {
+        this.send(store);
+      });
+      truck.setReceive(function (newStore) {
+        store = newStore;
+      });
+    })();
 
     //extends
     let Component1 = createComponent(() => {
@@ -49,9 +51,7 @@
       };
     });
 
-    let Component2 = createComponent(() => {
-      return ({ slot }) => Div([slot[0]]);
-    });
+    let Component2 = createComponent(() => ({ slot }) => Div([slot[0]]));
 
     // string slot | props | element slot
     let demo2 = Div({ title: 'outer-div' }, [
@@ -66,11 +66,9 @@
           '点击我',
         ]
       ),
-      Component1({
-        title: 'test props',
-      },['this is the different component']),
+      //测试 不同组件使用相同的store
+      Component1({ title: 'test props' }, ['this is the different component']),
     ]);
-    console.log(demo2);
 
     renderDOM(demo2, document.getElementById('root'));
   </script>
