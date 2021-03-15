@@ -2,6 +2,7 @@
 
 import { Component, isComponent } from './component';
 import { $Element, isElement } from './element';
+import { isFunction } from './tool';
 
 /**
  * keep current node
@@ -32,9 +33,7 @@ export function addQueen(type, component) {
     timestamp: +new Date(),
     component,
   });
-  if (renderQueen.length === 1) {
-    startClearQueen();
-  }
+  startClearQueen();
 }
 
 let pause = false;
@@ -43,7 +42,7 @@ let pause = false;
  *
  */
 function startClearQueen() {
-  if (!pause) {
+  if (!pause && renderQueen.length > 0) {
     pause = true;
     requestAnimationFrame(function () {
       pause = false;
@@ -99,6 +98,8 @@ function elementRender() {
     const value = attrs[key];
     if (typeof value === 'boolean') {
       ref[key] = value;
+    } else if (isFunction(value) && key.startsWith('on')) {
+      ref.addEventListener(key.substr(2), value);
     } else {
       ref.setAttribute(key, value);
     }
@@ -138,4 +139,3 @@ function componentRender() {
   let con = templet(renderData);
   return (this.ref = elementRender.call(con));
 }
-

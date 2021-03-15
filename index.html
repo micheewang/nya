@@ -13,33 +13,38 @@
     console.log(nya);
     const { TAG, createComponent, createTruck, renderDOM, useChapter } = nya;
 
-    let { Div } = TAG;
+    let { Div, Button } = TAG;
 
     let store = {
-      data: [{ class: 'frist' }, { class: 'second' }, { class: 'third' }],
       idx: 0,
     };
-
     let truck = createTruck();
     truck.setAnswer(function () {
-      this.send(store.data[store.idx++]);
+      this.send(store);
+    });
+    truck.setReceive(function (newStore) {
+      store = newStore;
     });
 
     //extends
     let Component1 = createComponent(() => {
-      let [getValue, setValue] = useChapter({});
+      let [getValue, setValue] = useChapter({ idx: 0 });
       truck.setReceive(function (data) {
         setValue(data);
       });
-      truck.get();
+
+      function onclick() {
+        truck.send({ idx: getValue().idx + 1 });
+      }
 
       return ({ slot, props }) => {
         var value = getValue();
-        return Div({ class: value.class, title: props.title || value.title }, [
-          Div('this is the ' + value.class + ' children.'),
+        return Div({ title: props.title }, [
+          Div('this is the ' + value.idx + ' children.'),
           slot[0],
           slot[1],
           slot[2],
+          slot[3] && Button({ onclick }, slot[3]),
         ]);
       };
     });
@@ -58,8 +63,12 @@
           'test string slot',
           Div('test element slot'),
           Component2(' test componet slot'),
+          '点击我',
         ]
       ),
+      Component1({
+        title: 'test props',
+      },['this is the different component']),
     ]);
     console.log(demo2);
 
