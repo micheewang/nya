@@ -4,4 +4,3 @@
 3. use diff
 4. control lifecycle 
 5. webpack compile => xxx compile
-6.

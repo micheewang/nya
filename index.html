@@ -11,32 +11,41 @@
   </body>
   <script>
     console.log(nya);
-    const { TAG, createComponent, renderDOM, useChapter } = nya;
+    const { TAG, createComponent, createTruck, renderDOM, useChapter } = nya;
 
     let { Div } = TAG;
 
-    let size = 0;
-    let goods = {
-      get class() {
-        return 'class' + size++;
-      },
+    let store = {
+      data: [{ class: 'frist' }, { class: 'second' }, { class: 'third' }],
+      idx: 0,
     };
+
+    let truck = createTruck();
+    truck.setAnswer(function () {
+      this.send(store.data[store.idx++]);
+    });
 
     //extends
     let Component1 = createComponent(() => {
-      let [value, setValue] = useChapter({ class: 'class', title: 'no title' });
-      return ({ slot, props }) =>
-        Div({ class: value.class, title: value.title }, [
+      let [getValue, setValue] = useChapter({});
+      truck.setReceive(function (data) {
+        setValue(data);
+      });
+      truck.get();
+
+      return ({ slot, props }) => {
+        var value = getValue();
+        return Div({ class: value.class, title: props.title || value.title }, [
           Div('this is the ' + value.class + ' children.'),
           slot[0],
           slot[1],
           slot[2],
         ]);
+      };
     });
 
     let Component2 = createComponent(() => {
-      let data = goods;
-      return ({ slot }) => Div(['this is', slot[0], data.class, ' component2']);
+      return ({ slot }) => Div([slot[0]]);
     });
 
     // string slot | props | element slot
@@ -47,29 +56,13 @@
         },
         [
           'test string slot',
-          Div('test element slot Component2'),
-          Component2(' slot'),
+          Div('test element slot'),
+          Component2(' test componet slot'),
         ]
       ),
-      Component2(' normal'),
     ]);
+    console.log(demo2);
 
     renderDOM(demo2, document.getElementById('root'));
-  </script>
-  <script>
-    // test truck
-    var truck = nya.createTruck();
-    //set
-    truck.setAnswer(function (name) {
-      setTimeout(() => {
-        this.send({ goods: 'goods' });
-      }, 2000);
-    });
-
-    ///get
-    var get = truck.get;
-    truck.setReceive(function (goods) {
-      console.log(goods);
-    });
   </script>
 </html>

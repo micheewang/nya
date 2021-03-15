@@ -3,6 +3,9 @@
 import { Component, isComponent } from './component';
 import { $Element, isElement } from './element';
 
+/**
+ * keep current node
+ */
 const current_node = {
   current: null,
 };
@@ -11,21 +14,55 @@ export function getInstance() {
   return current_node;
 }
 
+/*
+ * render queen
+ * type = Array<{timestamp: number, component: Component, skip: boolean}>
+ */
 const renderQueen = [];
+export const chapterSymbol = Symbol('chapterSymbol');
 
 /**
  *
  * @param {Component} component
  */
-export function addQueen(component) {
-  this.renderQueen.push({
+export function addQueen(type, component) {
+  //TODO 合并队列
+  renderQueen.push({
+    type,
     timestamp: +new Date(),
-    component: component,
+    component,
   });
+  if (renderQueen.length === 1) {
+    startClearQueen();
+  }
+}
+
+let pause = false;
+/**
+ * start clear render queen
+ *
+ */
+function startClearQueen() {
+  while (renderQueen.length > 0 && !pause) {
+    pause = true;
+    requestAnimationFrame(function () {
+      pause = false;
+      clearQueen(renderQueen.shift());
+      startClearQueen();
+    });
+  }
+}
+
+function clearQueen({ type, timestamp, component }) {
+  if (type === chapterSymbol) {
+    let ref = component.ref;
+    let el = componentRender.call(component);
+    ref.parentNode.replaceChild(el, ref);
+  }
 }
 
 /**
- *
+ * renderDom
  * @param {$Element | Component} element
  */
 export function renderDOM(element, root) {
@@ -37,17 +74,27 @@ export function renderDOM(element, root) {
   }
 }
 
+/**
+ * which render
+ * @param {Element|Component} element
+ * @returns
+ */
 function whichRender(element) {
   return isComponent(element)
-    ? ComponentRender.bind(element)
+    ? componentRender.bind(element)
     : elementRender.bind(element);
 }
 
+/**
+ * bind($Element)
+ * @returns Element
+ */
 function elementRender() {
   current_node.current = null;
   let { tagName, attrs, children } = this;
   const ref = (this.ref = document.createElement(tagName));
 
+  //TODO attribute set
   for (let key in attrs) {
     const value = attrs[key];
     if (typeof value === 'boolean') {
@@ -74,43 +121,20 @@ function elementRender() {
   return ref;
 }
 
-function ComponentRender() {
+/**
+ * bind(Component)
+ * @returns Element
+ */
+function componentRender() {
   let renderData = {
     props: this.attrs,
     slot: this.children,
-    data: this.getter(), //dep
   };
   current_node.current = this;
-  let con = this.templet()(renderData);
-  return (this.ref = elementRender.call(con));
-}
-
-//TODO
-function isNotObject(v) {
-  return typeof v !== 'object';
-}
-
-//data diff
-function getDiff(obj1, obj2, path = []) {
-  let diff = [];
-  if (isNotObject(obj1) || isNotObject(obj2)) {
-    if (obj1 !== obj2) {
-      diff.push(path);
-    }
-  } else {
-    if (Array.isArray(obj1) && Array.isArray(obj2)) {
-      obj1.forEach((value, index) => {
-        let _path = path.concat(index);
-        let _diff = getDiff(value, obj2[index], _path);
-        diff = Array.prototype.concat.apply(_diff, diff);
-      });
-    } else {
-      for (const key in obj1) {
-        let _path = path.concat(key);
-        let _diff = getDiff(obj1[key], obj2[key], _path);
-        diff = Array.prototype.concat.apply(_diff, diff);
-      }
-    }
+  if (this.templet === null) {
+    this.templet = this.hooks();
   }
-  return diff;
+  let templet = this.templet;
+  let con = templet(renderData);
+  return (this.ref = elementRender.call(con));
 }

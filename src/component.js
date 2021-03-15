@@ -1,17 +1,19 @@
 'use strict';
 
 import { $Element } from './element';
-import { isFunction, testFuntion } from './tool';
+import { testFuntion } from './tool';
 
+//extends $Element
+//keep Component and $Element(name | attrs | children) the same behavior
 export class Component extends $Element {
-  constructor(tagName, props, slot, templet, getter) {
+  constructor(tagName, props, slot, hooks) {
     super(tagName, props, slot);
-    this.templet = templet;
-    this.getter = isFunction(getter) ? getter : () => getter;
+    this.templet = null;
+    this.hooks = hooks;
   }
 }
 
-function curryArgs(...args) {
+function composeArgs(...args) {
   //These component belong to one type.
   const name = Symbol('Component');
   return function (props, slot) {
@@ -23,7 +25,7 @@ export function isComponent(con) {
   return con instanceof Component;
 }
 
-export function createComponent(templet, ...args) {
-  testFuntion(templet);
-  return curryArgs(templet, ...args);
+export function createComponent(hooks) {
+  testFuntion(hooks);
+  return composeArgs(hooks);
 }

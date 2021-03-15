@@ -1,21 +1,25 @@
 import { noop, testFuntion } from './tool';
 
 //private
-const get = Symbol('truck.get'),
-  send = Symbol('truck.send');
-
-const sendHandler = Symbol('truck.send.handler'),
-  getHandler = Symbol('truck.get.handler');
+const sendHandler = Symbol('truck.send.handler');
+const getHandler = Symbol('truck.get.handler');
 
 export class Truck {
   constructor() {
     this[getHandler] = new Set();
     this[sendHandler] = noop;
+
     this.get = (goodsName) => {
-      this[get](goodsName);
+      if (this[sendHandler] === noop) {
+        console.warn('No provider can provide data');
+      }
+      this[sendHandler].call(this, goodsName);
     };
+
     this.send = (goods) => {
-      this[send](goods);
+      this[getHandler].forEach((callback) => {
+        callback.call(this, goods);
+      });
     };
   }
 
@@ -38,19 +42,6 @@ export class Truck {
     if (this[getHandler].has(func)) {
       this[getHandler].delete(func);
     }
-  }
-
-  [get](goodsName) {
-    if (this[sendHandler] === noop) {
-      console.warn('No provider can provide data');
-    }
-    this[sendHandler].call(this, goodsName);
-  }
-
-  [send](goods) {
-    this[getHandler].forEach((callback) => {
-      callback.call(this, goods);
-    });
   }
 }
 
