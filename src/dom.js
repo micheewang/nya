@@ -1,5 +1,6 @@
 'use strict';
 
+import { testAttribute } from './attribute';
 import { Component, isComponent } from './component';
 import { $Element, isElement } from './element';
 import { isFunction } from './tool';
@@ -36,11 +37,10 @@ export function addQueen(type, component) {
   startClearQueen();
 }
 
-let pause = false;
 /**
  * start clear render queen
- *
  */
+let pause = false;
 function startClearQueen() {
   if (!pause && renderQueen.length > 0) {
     pause = true;
@@ -54,9 +54,7 @@ function startClearQueen() {
 
 function clearQueen({ type, timestamp, component }) {
   if (type === chapterSymbol) {
-    let ref = component.ref;
-    let el = componentRender.call(component);
-    ref.parentNode.replaceChild(el, ref);
+    componentRender.call(component);
   }
 }
 
@@ -66,8 +64,7 @@ function clearQueen({ type, timestamp, component }) {
  */
 export function renderDOM(element, root) {
   if (isElement(element)) {
-    let el = whichRender(element)();
-    root.appendChild(el);
+    whichRender(element)(root);
   } else {
     throw new Error(`The root element must mount the component.`);
   }
@@ -84,18 +81,35 @@ function whichRender(element) {
     : elementRender.bind(element);
 }
 
+function insertChildByIdx(parent, node, idx = -1) {
+  let children = parent.children;
+  if (idx > 0 && children.length > 0) {
+    let target =
+      children.length > idx ? children[idx] : children[children.length - 1];
+    parent.insertBefore(node, target);
+  } else {
+    parent.appendChild(node);
+  }
+}
+
+function insertChild(parent, node, target) {
+  parent.insertBefore(node, target);
+}
+
 /**
  * bind($Element)
  * @returns Element
  */
-function elementRender() {
+function elementRender(parentNode) {
   current_node.current = null;
   let { tagName, attrs, children } = this;
   const ref = (this.ref = document.createElement(tagName));
 
-  //TODO attribute set
   for (let key in attrs) {
     const value = attrs[key];
+    if (testAttribute(key, value, this)) {
+      continue;
+    }
     if (typeof value === 'boolean') {
       ref[key] = value;
     } else if (isFunction(value) && key.startsWith('on')) {
@@ -110,15 +124,17 @@ function elementRender() {
     if (element === undefined || element === null || element === '') {
       continue;
     }
-    let el = null;
     if (isElement(element)) {
-      el = whichRender(element)();
+      whichRender(element)(ref);
     } else {
-      el = document.createTextNode(element);
+      let textNode = document.createTextNode(element);
+      ref.appendChild(textNode);
     }
-    ref.appendChild(el);
   }
 
+  if (parentNode) {
+    parentNode.appendChild(ref);
+  }
   return ref;
 }
 
@@ -126,16 +142,28 @@ function elementRender() {
  * bind(Component)
  * @returns Element
  */
-function componentRender() {
+function componentRender(parentNode) {
   let renderData = {
     props: this.attrs,
     slot: this.children,
   };
-  current_node.current = this;
-  if (this.templet === null) {
-    this.templet = this.hooks();
+
+  if (parentNode) {
+    this.parentNode = parentNode;
   }
-  let templet = this.templet;
-  let con = templet(renderData);
-  return (this.ref = elementRender.call(con));
+  current_node.current = this;
+
+  //limit
+  if (this.templet === null) {
+    this.templet = this.const();
+  }
+
+  let element = this.templet(renderData);
+  let oldRef = this.ref;
+  this.ref = elementRender.call(element, this.parentNode);
+  if (!parentNode) {
+    this.parentNode.replaceChild(this.ref, oldRef);
+    this.unMouted && this.unMouted();
+  }
+  this.mouted && this.mouted();
 }

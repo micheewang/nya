@@ -1,6 +1,6 @@
 # TODO
-1. JIT optimization
-2. collect dependency
-3. use diff
-4. control lifecycle 
+1. control lifecycle
+2. use diff
+3. collect dependency JIT optimization
+4. hooks  
 5. webpack compile => xxx compile

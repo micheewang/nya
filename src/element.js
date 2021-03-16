@@ -1,6 +1,5 @@
 'use strict';
 
-import { noop } from "./tool";
 
 export class $Element {
   constructor(tagName, attrs, children ) {
@@ -26,8 +25,6 @@ export class $Element {
     this.mark = [];
     this.attrs = attrs;
     this.children = children;
-    this.mouted = noop;
-    this.unMouted = noop;
   }
 }
 

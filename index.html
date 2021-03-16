@@ -11,7 +11,15 @@
   </body>
   <script>
     console.log(nya);
-    const { TAG, createComponent, createTruck, renderDOM, useChapter } = nya;
+    const {
+      TAG,
+      createComponent,
+      createTruck,
+      renderDOM,
+      useChapter,
+      useMouted,
+      useUnMouted,
+    } = nya;
 
     let { Div, Button } = TAG;
 
@@ -33,6 +41,14 @@
       let [getValue, setValue] = useChapter({ idx: 0 });
       truck.setReceive(function (data) {
         setValue(data);
+      });
+
+      useMouted(function () {
+        console.log('i is mouted');
+      });
+
+      useUnMouted(function(){
+        console.log('i is unmouted');
       });
 
       function onclick() {
@@ -69,7 +85,7 @@
       //测试 不同组件使用相同的store
       Component1({ title: 'test props' }, ['this is the different component']),
     ]);
-
+    console.log(demo2);
     renderDOM(demo2, document.getElementById('root'));
   </script>
 </html>

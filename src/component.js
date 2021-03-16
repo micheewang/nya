@@ -6,10 +6,17 @@ import { testFuntion } from './tool';
 //extends $Element
 //keep Component and $Element(name | attrs | children) the same behavior
 export class Component extends $Element {
-  constructor(tagName, props, slot, hooks) {
+  constructor(tagName, props, slot, $const) {
     super(tagName, props, slot);
+    this.const = $const;
     this.templet = null;
-    this.hooks = hooks;
+    this.parentNode = null;
+
+    //lifecycle
+    this.mouted = null;
+    this.update = null;
+    this.unMouted = null;
+    //....
   }
 }
 

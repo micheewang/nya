@@ -16,6 +16,11 @@ export function copy(v) {
     return v;
   }
 }
+export function compose(...fns) {
+  return function (...arg) {
+    fns.forEach((fn) => fn.call(this, ...arg));
+  };
+}
 
 export function noop() {}
 
@@ -29,16 +34,8 @@ export function isFunction(f) {
   return typeof f === 'function';
 }
 
-
-
-
-//TODO
-function isNotObject(v) {
-  return typeof v !== 'object';
-}
-
-//data diff
-function getDiff(obj1, obj2, path = []) {
+//different of json
+export function getDiff(obj1, obj2, path = []) {
   let diff = [];
   if (isNotObject(obj1) || isNotObject(obj2)) {
     if (obj1 !== obj2) {
