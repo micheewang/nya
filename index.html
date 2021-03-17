@@ -25,7 +25,7 @@
       useUnMouted,
     } = nya;
 
-    let { Div, Button } = TAG;
+    let { Div, Button, Input } = TAG;
 
     let truck = (function () {
       let truck = createTruck();
@@ -42,7 +42,7 @@
     })();
 
     //extends
-    let Component1 = createComponent(() => {
+    let Component1 = createComponent(({ slot, props }) => {
       let [getValue, setValue] = useChapter({ idx: 0 });
       truck.setReceive(function (data) {
         setValue(data);
@@ -63,7 +63,7 @@
         truck.send({ idx: getValue().idx + 1 });
       }
 
-      return ({ slot, props }) => {
+      return () => {
         var value = getValue();
         return Div({ title: props.title, ref }, [
           Div('this is the ' + value.idx + ' children.'),
@@ -75,7 +75,7 @@
       };
     });
 
-    let Component2 = createComponent(() => ({ slot }) => Div([slot[0]]));
+    let Component2 = createComponent(({ slot }) => () => Div([slot[0]]));
 
     // string slot | props | element slot
     let demo2 = Div({ title: 'outer-div' }, [

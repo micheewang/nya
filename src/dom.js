@@ -132,11 +132,6 @@ function elementRender(parentNode) {
  * @returns Element
  */
 function componentRender(parentNode) {
-  let renderData = {
-    props: this.attrs,
-    slot: this.children,
-  };
-
   if (parentNode) {
     this.parentNode = parentNode;
   }
@@ -144,11 +139,15 @@ function componentRender(parentNode) {
   //set current_node direct this
   if (this.templet === null) {
     current_node.current = this;
-    this.templet = this.const();
+    let renderData = {
+      props: this.attrs,
+      slot: this.children,
+    };
+    this.templet = this.const(renderData);
     current_node.current = null;
   }
 
-  let element = this.templet(renderData);
+  let element = this.templet();
   let oldRef = this.ref;
   this.ref = elementRender.call(element, this.parentNode);
   if (!parentNode) {

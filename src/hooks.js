@@ -4,9 +4,9 @@ import { testFuntion } from './tool';
 
 function useChapter(chapter) {
   let current = getInstance();
-  Object.freeze(chapter);
   let currentData = chapter;
 
+  Object.freeze(chapter);
   return [
     function getter() {
       return currentData;
