@@ -3,7 +3,7 @@
 import { testAttribute } from './attribute';
 import { Component, isComponent } from './component';
 import { $Element, isElement } from './element';
-import { current_node } from './getInstance';
+import { current_node } from './instance';
 import { isFunction } from './tool';
 
 /*
@@ -87,8 +87,7 @@ function insertChild(parent, node, target) {
 }
 
 /**
- * bind($Element)
- * @returns Element
+ * 
  */
 function elementRender(parentNode) {
   let { tagName, attrs, children } = this;
@@ -128,8 +127,7 @@ function elementRender(parentNode) {
 }
 
 /**
- * bind(Component)
- * @returns Element
+ * 
  */
 function componentRender(parentNode) {
   if (parentNode) {

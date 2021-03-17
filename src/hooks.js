@@ -1,5 +1,5 @@
 import { addQueen, chapterSymbol } from './dom';
-import { getInstance } from './getInstance';
+import { getInstance } from './instance';
 import { testFuntion } from './tool';
 
 function useChapter(chapter) {
@@ -36,12 +36,8 @@ function useUnMouted(callback) {
   current.unMouted = callback;
 }
 
-function useRef(callback) {
-  testFuntion(callback);
-}
 
 export default {
-  useRef,
   useChapter,
   useMouted,
   useUpdate,
