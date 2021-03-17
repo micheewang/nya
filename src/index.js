@@ -4,12 +4,14 @@ import { createComponent } from './component';
 import { renderDOM } from './dom';
 import { createTruck } from './truck';
 import hooks from './hooks';
+import { createRef } from './ref';
 
 window.nya = Object.assign(
   {
+    renderDOM,
+    createRef,
     createElement,
     createComponent,
-    renderDOM,
     createTruck,
     TAG,
   },

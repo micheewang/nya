@@ -1,16 +1,9 @@
-import { addQueen, chapterSymbol, getInstance } from './dom';
-import { compose, noop, testFuntion } from './tool';
-
-function resolveDispatcher() {
-  let current = getInstance().current;
-  if (!current) {
-    throw new Error('hooks must be called inside Component');
-  }
-  return current;
-}
+import { addQueen, chapterSymbol } from './dom';
+import { getInstance } from './getInstance';
+import { testFuntion } from './tool';
 
 function useChapter(chapter) {
-  let current = resolveDispatcher();
+  let current = getInstance();
   Object.freeze(chapter);
   let currentData = chapter;
 
@@ -27,18 +20,30 @@ function useChapter(chapter) {
 
 function useMouted(callback) {
   testFuntion(callback);
-  let current = resolveDispatcher();
+  let current = getInstance();
   current.mouted = callback;
+}
+
+function useUpdate() {
+  testFuntion(callback);
+  let current = getInstance();
+  current.update = callback;
 }
 
 function useUnMouted(callback) {
   testFuntion(callback);
-  let current = resolveDispatcher();
+  let current = getInstance();
   current.unMouted = callback;
 }
 
+function useRef(callback) {
+  testFuntion(callback);
+}
+
 export default {
+  useRef,
   useChapter,
   useMouted,
+  useUpdate,
   useUnMouted,
 };

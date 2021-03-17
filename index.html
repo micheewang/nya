@@ -13,9 +13,13 @@
     console.log(nya);
     const {
       TAG,
-      createComponent,
-      createTruck,
+
       renderDOM,
+
+      createRef,
+      createTruck,
+      createComponent,
+
       useChapter,
       useMouted,
       useUnMouted,
@@ -23,8 +27,8 @@
 
     let { Div, Button } = TAG;
 
-    let truck = createTruck();
-    (function () {
+    let truck = (function () {
+      let truck = createTruck();
       let store = {
         idx: 0,
       };
@@ -34,6 +38,7 @@
       truck.setReceive(function (newStore) {
         store = newStore;
       });
+      return truck;
     })();
 
     //extends
@@ -45,11 +50,14 @@
 
       useMouted(function () {
         console.log('i is mouted');
+        console.log(ref.current);
       });
 
-      useUnMouted(function(){
+      useUnMouted(function () {
         console.log('i is unmouted');
       });
+
+      let ref = createRef();
 
       function onclick() {
         truck.send({ idx: getValue().idx + 1 });
@@ -57,7 +65,7 @@
 
       return ({ slot, props }) => {
         var value = getValue();
-        return Div({ title: props.title }, [
+        return Div({ title: props.title, ref }, [
           Div('this is the ' + value.idx + ' children.'),
           slot[0],
           slot[1],

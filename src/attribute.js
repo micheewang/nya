@@ -4,7 +4,7 @@ const allAttribute = {};
 tagReg.set(/[a-zA-Z]+/, allAttribute);
 
 allAttribute.ref = function (element, attrValue) {
-  attrValue.bind(element.ref);
+  attrValue(element.ref);
 };
 
 export function testAttribute(element, attrName, attrValue) {

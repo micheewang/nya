@@ -3,18 +3,8 @@
 import { testAttribute } from './attribute';
 import { Component, isComponent } from './component';
 import { $Element, isElement } from './element';
+import { current_node } from './getInstance';
 import { isFunction } from './tool';
-
-/**
- * keep current node
- */
-const current_node = {
-  current: null,
-};
-
-export function getInstance() {
-  return current_node;
-}
 
 /*
  * render queen
@@ -101,13 +91,12 @@ function insertChild(parent, node, target) {
  * @returns Element
  */
 function elementRender(parentNode) {
-  current_node.current = null;
   let { tagName, attrs, children } = this;
   const ref = (this.ref = document.createElement(tagName));
 
   for (let key in attrs) {
     const value = attrs[key];
-    if (testAttribute(key, value, this)) {
+    if (testAttribute(this, key, value)) {
       continue;
     }
     if (typeof value === 'boolean') {
@@ -151,11 +140,12 @@ function componentRender(parentNode) {
   if (parentNode) {
     this.parentNode = parentNode;
   }
-  current_node.current = this;
 
-  //limit
+  //set current_node direct this
   if (this.templet === null) {
+    current_node.current = this;
     this.templet = this.const();
+    current_node.current = null;
   }
 
   let element = this.templet(renderData);
