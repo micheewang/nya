@@ -1,6 +1,12 @@
 'use strict';
 
-
+// 基本虚拟节点
+// new $Element('div')
+// new $Element('div','test')
+// new $Element('div',['test'])
+// new $Element('div',{})
+// new $Element('div',{},['test'])
+// new $Element('div',{},'test')
 export class $Element {
   constructor(tagName, attrs, children ) {
     if (typeof attrs === 'string' || isElement(attrs)) {
@@ -19,6 +25,7 @@ export class $Element {
       : [];
 
     this.tagName = tagName;
+    //dom实例
     this.ref = null;
 
     //runtime optimization
@@ -37,6 +44,7 @@ export function createElement(tagName, attrs, children) {
   return con;
 }
 
+//柯里化
 export const TAG = Proxy
   ? new Proxy(
       {},

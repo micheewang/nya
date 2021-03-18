@@ -1,19 +1,25 @@
-import { addQueen, chapterSymbol } from './dom';
+import { addQueen } from './dom';
 import { getInstance } from './instance';
 import { testFuntion } from './tool';
 
+//数据hooks
 function useChapter(chapter) {
+  //获取当前active的虚拟节点
   let current = getInstance();
+  //局部变量保存值
   let currentData = chapter;
 
-  Object.freeze(chapter);
   return [
+    //getter
     function getter() {
       return currentData;
     },
+    //setter
     function setter(value) {
+      //缓存新值
       currentData = value;
-      addQueen(chapterSymbol, current);
+      //添加至渲染队列
+      addQueen(current);
     },
   ];
 }
@@ -35,7 +41,6 @@ function useUnMouted(callback) {
   let current = getInstance();
   current.unMouted = callback;
 }
-
 
 export default {
   useChapter,

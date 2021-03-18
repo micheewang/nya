@@ -16,6 +16,8 @@ export function copy(v) {
     return v;
   }
 }
+
+//合并函数为一个函数
 export function compose(...fns) {
   return function (...arg) {
     fns.forEach((fn) => fn.call(this, ...arg));
@@ -34,7 +36,8 @@ export function isFunction(f) {
   return typeof f === 'function';
 }
 
-//different of json
+//TODO
+// 数据的diff,用于值改变后通过对比依赖来获取需要改变的节点
 export function getDiff(obj1, obj2, path = []) {
   let diff = [];
   if (isNotObject(obj1) || isNotObject(obj2)) {
