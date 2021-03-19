@@ -36,6 +36,20 @@ export function isFunction(f) {
   return typeof f === 'function';
 }
 
+export function insertChildByIdx(parent, node, idx = -1) {
+  let children = parent.children;
+  if (idx > 0 && children.length > 0) {
+    let target =
+      children.length > idx ? children[idx] : children[children.length - 1];
+    parent.insertBefore(node, target);
+  } else {
+    parent.appendChild(node);
+  }
+}
+
+export function insertChild(parent, node, target) {
+  parent.insertBefore(node, target);
+}
 //TODO
 // 数据的diff,用于值改变后通过对比依赖来获取需要改变的节点
 export function getDiff(obj1, obj2, path = []) {

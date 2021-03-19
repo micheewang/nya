@@ -22,6 +22,7 @@
 
       useChapter,
       useMouted,
+      useUpdate,
       useUnMouted,
     } = nya;
 
@@ -56,14 +57,18 @@
 
       //生命周期挂载后
       useMouted(function () {
-        console.log('i is mouted');
-        // console.log(ref.current);
+        console.log('mouted occrt');
+        console.log(ref.current);
       });
 
       //生命周期卸载后
       useUnMouted(function () {
-        console.log('i is unmouted');
+        console.log('unmouted occur');
       });
+
+      useUpdate(function(){
+        console.log('update occur')
+      })
 
       //获取element对象,本质上是一个函数
       let ref = createRef();

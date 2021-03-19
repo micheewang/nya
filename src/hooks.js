@@ -30,7 +30,7 @@ function useMouted(callback) {
   current.mouted = callback;
 }
 
-function useUpdate() {
+function useUpdate(callback) {
   testFuntion(callback);
   let current = getInstance();
   current.update = callback;
