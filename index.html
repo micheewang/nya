@@ -83,7 +83,7 @@
           slot[3] && Button({ onclick }, slot[3]),
           Div('this is the ' + value.idx + ' children.'),
           slot[0],
-          !value.flag ? '' : slot[2],
+          !value.flag ? null : slot[2],
           slot[1],
         ]);
       };
