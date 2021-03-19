@@ -61,8 +61,7 @@
         console.log(ref.current);
       });
 
-      //生命周期卸载后
-
+      //生命周期更新后
       useUpdate(function () {
         console.log('update occur');
       });
@@ -91,6 +90,7 @@
     });
 
     let Component2 = createComponent(() => {
+      //生命周期卸载后
       useUnMouted(function () {
         console.log('unmouted occur');
       });
@@ -99,7 +99,7 @@
     });
 
     // string slot | props | element slot
-    let demo2 = Div({ title: 'outer-div' }, [
+    let App = Div({ title: 'outer-div' }, [
       Component1(
         {
           title: 'test props',
@@ -114,6 +114,6 @@
     ]);
 
     //渲染
-    renderDOM(demo2, document.getElementById('root'));
+    renderDOM(App, document.getElementById('root'));
   </script>
 </html>
