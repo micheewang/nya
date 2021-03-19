@@ -26,13 +26,14 @@
       useUnMouted,
     } = nya;
 
-    let { Div, Button, Input } = TAG;
+    let { Div, Button, Input, Hr } = TAG;
 
     //组件间的通讯方法
     let truck = (function () {
       let truck = createTruck();
       let store = {
         idx: 0,
+        flag: true,
       };
       truck.setAnswer(function () {
         this.send(store);
@@ -46,7 +47,6 @@
     //创建一个新的虚拟节点集合
     let Component1 = createComponent(({ slot, props }) => {
       //这个函数会在实例化时执行一次
-
 
       //创建数据
       let [getValue, setValue] = useChapter({ idx: 0 });
@@ -62,20 +62,18 @@
       });
 
       //生命周期卸载后
-      useUnMouted(function () {
-        console.log('unmouted occur');
-      });
 
-      useUpdate(function(){
-        console.log('update occur')
-      })
+      useUpdate(function () {
+        console.log('update occur');
+      });
 
       //获取element对象,本质上是一个函数
       let ref = createRef();
 
       //事件
       function onclick() {
-        truck.send({ idx: getValue().idx + 1 });
+        let data = getValue();
+        truck.send({ idx: data.idx + 1, flag: !data.flag });
       }
 
       //返回组件集合,这个函数会执行多次
@@ -83,16 +81,22 @@
         //只能在这里获取数据,前面获取的数据因为作用域都为静态值
         var value = getValue();
         return Div({ title: props.title, ref }, [
+          slot[3] && Button({ onclick }, slot[3]),
           Div('this is the ' + value.idx + ' children.'),
           slot[0],
-          slot[2],
+          !value.flag ? '' : slot[2],
           slot[1],
-          slot[3] && Button({ onclick }, slot[3]),
         ]);
       };
     });
 
-    let Component2 = createComponent(({ slot }) => () => Div([slot[0]]));
+    let Component2 = createComponent(() => {
+      useUnMouted(function () {
+        console.log('unmouted occur');
+      });
+
+      return () => Div('test componet slot');
+    });
 
     // string slot | props | element slot
     let demo2 = Div({ title: 'outer-div' }, [
@@ -100,13 +104,11 @@
         {
           title: 'test props',
         },
-        [
-          'test string slot',
-          Div('test element slot'),
-          Component2(' test componet slot'),
-          '点击我',
-        ]
+        ['test string slot', Div('test element slot'), Component2(), '点击我']
       ),
+      Hr(),
+      Div('这里是component分割线'),
+      Hr(),
       //不同组件使用相同的store
       Component1({ title: 'test props' }, ['this is the different component']),
     ]);

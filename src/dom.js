@@ -17,40 +17,46 @@ const renderQueen = [];
  * @param {Component} component
  */
 export function addQueen(component) {
-  //TODO 合并队列
-  renderQueen.push({
-    timestamp: +new Date(),
-    component,
-  });
-  //清空队列
-  startClearQueen();
-}
-
-let readySize = 0;
-/**
- * start clear render queen
- */
-function startClearQueen() {
-  //TODO 合并队列完成后可以删除此处的渲染队列限制
-  if (renderQueen.length - readySize > 0) {
-    readySize++;
+  if (
+    renderQueen.push({
+      timestamp: +new Date(),
+      component,
+    }) === 1
+  ) {
+    //合并
     requestAnimationFrame(function () {
-      readySize--;
-      clearQueen(renderQueen.shift());
-      startClearQueen();
+      while (renderQueen.length) {
+        updateComponet(renderQueen.shift());
+      }
     });
   }
 }
 
-function clearQueen({ timestamp, component }) {
-  // TODO 加入diff
-  // let oldVnode = component.vNode;
-  let update = component.update;
+function updateComponet({ timestamp, component }) {
+  // TODO 加入diff | filber
+  let oldVnode = component.vNode;
   let newVnode = component.templet();
   let el = elementRender.call(newVnode);
+  component.vNode = newVnode;
+
   component.parentNode.replaceChild(el, component.ref);
   component.ref = el;
-  isFunction(update) && update();
+  //卸载触发
+  trigerUnMouted(oldVnode);
+  //当前组件更新
+  isFunction(component.update) && component.update();
+}
+
+//递归触发卸载
+function trigerUnMouted(node) {
+  if (isComponent(node)) {
+    isFunction(node.unMouted) && node.unMouted();
+  }
+  node.children.forEach((node) => {
+    if (isElement(node)) {
+      trigerUnMouted(node);
+    }
+  });
 }
 
 /**
@@ -112,7 +118,7 @@ function elementRender(parentNode) {
       }
     } else {
       //为本节点
-      let textNode = document.createTextNode(node);
+      let textNode = document.createTextNode(String(node));
       ref.appendChild(textNode);
     }
   }
