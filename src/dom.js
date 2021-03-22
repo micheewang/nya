@@ -49,7 +49,7 @@ function updateComponet({ timestamp, component }) {
   triggerEvents(newVnode, 'mouted');
 }
 
-//递归触发卸载
+//递归触发event
 function triggerEvents(node, eventName) {
   if (isComponent(node)) {
     isFunction(node[eventName]) && node[eventName]();
