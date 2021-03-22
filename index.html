@@ -26,10 +26,10 @@
       useUnMouted,
     } = nya;
 
-    let { Div, Button, Input, Hr } = TAG;
+    const { Div, Button, Input, Hr } = TAG;
 
     //组件间的通讯方法
-    let truck = (function () {
+    const truck = (function () {
       let truck = createTruck();
       let store = {
         idx: 0,
@@ -45,7 +45,7 @@
     })();
 
     //创建一个新的虚拟节点集合
-    let Component1 = createComponent(({ slot, props }) => {
+    const Component1 = createComponent(({ slot, props }) => {
       //这个函数会在实例化时执行一次
 
       //创建数据
@@ -89,7 +89,7 @@
       };
     });
 
-    let Component2 = createComponent(() => {
+    const Component2 = createComponent(() => {
       //生命周期卸载后
       useUnMouted(function () {
         console.log('unmouted occur');
@@ -99,7 +99,7 @@
     });
 
     // string slot | props | element slot
-    let App = Div({ title: 'outer-div' }, [
+    const App = Div({ title: 'outer-div' }, [
       Component1(
         {
           title: 'test props',

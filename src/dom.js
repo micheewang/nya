@@ -42,19 +42,21 @@ function updateComponet({ timestamp, component }) {
   component.parentNode.replaceChild(el, component.ref);
   component.ref = el;
   //卸载触发
-  trigerUnMouted(oldVnode);
+  triggerEvents(oldVnode, 'unMouted');
   //当前组件更新
   isFunction(component.update) && component.update();
+  //子组件全部触发mouted
+  triggerEvents(newVnode, 'mouted');
 }
 
 //递归触发卸载
-function trigerUnMouted(node) {
+function triggerEvents(node, eventName) {
   if (isComponent(node)) {
-    isFunction(node.unMouted) && node.unMouted();
+    isFunction(node[eventName]) && node[eventName]();
   }
-  node.children.forEach((node) => {
-    if (isElement(node)) {
-      trigerUnMouted(node);
+  node.children.forEach((cNode) => {
+    if (isElement(cNode)) {
+      triggerEvents(cNode, eventName);
     }
   });
 }
