@@ -12,19 +12,23 @@ export class Store {
     this.wants = new Set();
   }
 
+  //主动发送给所有的组件
   send() {
     this.wants.forEach((d) => d());
   }
 
+  //解绑
   unbind(want) {
     if (this.wants.has(want)) {
       this.wants.delete(want);
     }
   }
 
-  //obtain send
+  //创建want|send
   createTruck(receiver) {
     testFuntion(receiver);
+
+    //want
     let want = () => {
       this.responder((data) => {
         receiver(data);

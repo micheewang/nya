@@ -12,14 +12,18 @@
   <script>
     console.log(nya);
     const {
+      //标签容器
       TAG,
 
+      //渲染方法
       renderDOM,
 
+      //create
       createRef,
       createStore,
       createComponent,
 
+      //hooks
       useChapter,
       useMouted,
       useUpdate,
@@ -35,11 +39,18 @@
         flag: true,
       };
       return createStore(
+        //responder
+        //某组件want时触发
         function (send) {
+          //async
           send(obj);
         },
+
+        //receiver
+        //某组件send时触发
         function (data) {
           obj = data;
+          //发送给所有的组件
           this.send(obj);
         }
       );
@@ -50,7 +61,7 @@
       //这个函数会在实例化时执行一次
 
       //创建数据
-      let [getValue, setValue] = useChapter({ idx: 0 });
+      let [getValue, setValue] = useChapter(/*{ idx: 0 }*/);
 
       //
       let name = Symbol('Component');
@@ -92,7 +103,6 @@
           !data.flag ? null : slot[2],
           slot[3],
         ]);
-
     });
 
     const Component2 = createComponent(() => {
@@ -104,7 +114,9 @@
       return () => Div('test componet slot');
     });
 
-    // string slot | props | element slot
+    /**
+     * create App
+     */
     const App = Div({ title: 'outer-div' }, [
       Component1(
         {

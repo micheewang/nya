@@ -23,7 +23,7 @@ export function addQueen(component) {
       component,
     }) === 1
   ) {
-    //合并
+    //合并渲染
     requestAnimationFrame(function () {
       while (renderQueen.length) {
         updateComponet(renderQueen.shift());
