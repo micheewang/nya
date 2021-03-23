@@ -29,12 +29,12 @@
     const { Div, Button, Input, Hr } = TAG;
 
     //组件间的通讯方法
-    const truck = (function () {
+    const store = (function () {
       let obj = {
         idx: 0,
         flag: true,
       };
-      const truck = createStore(
+      return createStore(
         function (send) {
           send(obj);
         },
@@ -43,7 +43,6 @@
           this.send(obj);
         }
       );
-      return truck;
     })();
 
     //创建一个新的虚拟节点集合
@@ -57,7 +56,7 @@
       let name = Symbol('Component');
 
       //组件间的通讯方式
-      let [want, send] = truck.createTruck(setValue);
+      let [want, send] = store.createTruck(setValue);
       want();
 
       //生命周期挂载后
@@ -71,7 +70,7 @@
       });
 
       useUnMouted(function () {
-        truck.unbind(want);
+        store.unbind(want);
       });
 
       //获取element对象,本质上是一个函数
@@ -84,17 +83,16 @@
       }
 
       //返回组件集合,这个函数会执行多次
-      return () => {
-        //只能在这里获取数据,前面获取的数据因为作用域都为静态值
-        var value = getValue();
-        return Div({ title: props.title, ref }, [
+      //只能在这里获取数据,前面获取的数据因为作用域都为静态值
+      return (data) =>
+        Div({ title: props.title, ref }, [
           slot[0] && Button({ onclick }, slot[0]),
-          Div('this is the ' + value.idx + ' children.'),
+          Div('this is the ' + data.idx + ' children.'),
           slot[1],
-          !value.flag ? null : slot[2],
+          !data.flag ? null : slot[2],
           slot[3],
         ]);
-      };
+
     });
 
     const Component2 = createComponent(() => {

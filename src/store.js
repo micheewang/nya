@@ -1,4 +1,4 @@
-import { isFunction, noop, testFuntion } from './tool';
+import { noop, testFuntion } from './tool';
 
 // 组件间的数据通信,只管运输,不管储存
 // 是一个仓库一对多组件的形式
@@ -15,6 +15,7 @@ export class Store {
   send() {
     this.wants.forEach((d) => d());
   }
+
   unbind(want) {
     if (this.wants.has(want)) {
       this.wants.delete(want);

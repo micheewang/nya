@@ -9,19 +9,21 @@ function useChapter(chapter) {
   //局部变量保存值
   let currentData = chapter;
 
-  return [
-    //getter
-    function getter() {
-      return currentData;
-    },
-    //setter
-    function setter(value) {
-      //缓存新值
-      currentData = value;
-      //添加至渲染队列
-      addQueen(current);
-    },
-  ];
+  //getter
+  function getter() {
+    return currentData;
+  }
+
+  //setter
+  function setter(value) {
+    //缓存新值
+    currentData = value;
+    //添加至渲染队列
+    addQueen(current);
+  }
+
+  current.getter = getter;
+  return [getter, setter];
 }
 
 function useMouted(callback) {

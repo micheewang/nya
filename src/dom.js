@@ -35,7 +35,7 @@ export function addQueen(component) {
 function updateComponet({ timestamp, component }) {
   // TODO 加入diff | filber
   let oldVnode = component.vNode;
-  let newVnode = component.templet();
+  let newVnode = getVNode(component);
   let el = elementRender.call(newVnode);
   component.vNode = newVnode;
 
@@ -158,10 +158,20 @@ function componentRender(parentNode) {
   }
 
   //执行vnode模板获取虚拟节点
-  let vNode = (this.vNode = this.templet());
+  let vNode = (this.vNode = getVNode(this));
 
   this.ref = elementRender.call(vNode, parentNode);
 
   //生命周期--挂载
   isFunction(this.mouted) && this.mouted();
+}
+
+function getVNode(component) {
+  if (component.templet) {
+    if (component.getter) {
+      return component.templet(component.getter());
+    } else {
+      return component.templet();
+    }
+  }
 }

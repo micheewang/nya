@@ -16,6 +16,9 @@ export class Component extends $Element {
     this.vNode = null;
     this.parentNode = null;
 
+    //data getter
+    this.getter = null;
+
     //lifecycle
     this.mouted = null;
     this.update = null;
