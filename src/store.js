@@ -7,6 +7,7 @@ import { noop, testFuntion } from './tool';
 export class Store {
   constructor(responder, recipient) {
     testFuntion(responder);
+
     this.responder = responder;
     this.recipient = recipient || noop;
     this.wants = new Set();

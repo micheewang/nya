@@ -32,6 +32,17 @@
 
     const { Div, Button, Input, Hr } = TAG;
 
+    //自定义hooks
+    function useTruck(store) {
+      let [getValue, setValue] = useChapter();
+
+      useUnMouted(function () {
+        store.unbind(want);
+      });
+
+      return ([want, send] = store.createTruck(setValue));
+    }
+
     //组件间的通讯方法
     const store = (function () {
       let obj = {
@@ -63,9 +74,6 @@
       //创建数据
       let [getValue, setValue] = useChapter(/*{ idx: 0 }*/);
 
-      //
-      let name = Symbol('Component');
-
       //组件间的通讯方式
       let [want, send] = store.createTruck(setValue);
       want();
@@ -80,6 +88,7 @@
         console.log('update occur, current target node:', ref.current);
       });
 
+      //生命周期卸载后
       useUnMouted(function () {
         store.unbind(want);
       });
@@ -129,11 +138,13 @@
           Component2(), //component slot
         ]
       ),
+
       Hr(),
       Div('这里是component分割线'),
       Hr(),
+
       //不同组件使用相同的store
-      Component1({ title: 'test props' }, [
+      Component1({ title: 'test different props' }, [
         ,
         'this is the different component',
       ]),
