@@ -41,7 +41,7 @@
         store.unbind(want);
       });
 
-      return ([want, send] = store.createTruck(setValue));
+      return [store.createTruck(setValue), getValue, setValue];
     }
 
     //组件间的通讯方法
@@ -111,7 +111,7 @@
           Div('this is the ' + data.idx + ' children.'),
           slot[1],
           !data.flag ? null : slot[2],
-          slot[3],
+          data.flag ? null : slot[3],
         ]);
     });
 
@@ -146,7 +146,7 @@
 
       //不同组件使用相同的store
       Component1({ title: 'test different props' }, [
-        ,
+        null,
         'this is the different component',
       ]),
     ]);
