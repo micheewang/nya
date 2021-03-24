@@ -10,23 +10,20 @@ function useChapter(chapter) {
   let currentData = chapter;
 
   //getter
-  current.getter = current.getter
-    ? current.getter
-    : function getter() {
-        return currentData;
-      };
+  function getter() {
+    return currentData;
+  }
 
   //setter
-  current.setter = current.setter
-    ? current.setter
-    : function setter(value) {
-        //缓存新值
-        currentData = value;
-        //添加至渲染队列
-        addQueen(current);
-      };
+  function setter(value) {
+    //缓存新值
+    currentData = value;
+    //添加至渲染队列
+    addQueen(current);
+  }
 
-  return [current.getter, current.setter];
+  current.getter = getter;
+  return [getter, setter];
 }
 
 function useMouted(callback) {
