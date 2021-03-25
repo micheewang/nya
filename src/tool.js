@@ -24,6 +24,20 @@ export function compose(...fns) {
   };
 }
 
+export function memoize(fn) {
+  var memoize = function (...args) {
+    var cache = memoize.cache;
+    var address = args.join(',');
+    if (!Object.hasOwnProperty.call(cache, address)) {
+      cache[address] = fn.apply(this, args);
+    }
+    return cache[address];
+  };
+  memoize.cache = {};
+  return memoize;
+}
+
+
 export function noop() {}
 
 export function testFuntion(a, msg) {
