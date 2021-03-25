@@ -41,7 +41,7 @@
         store.unbind(want);
       });
 
-      return [store.createTruck(setValue), getValue, setValue];
+      return [...store.createTruck(setValue), getValue, setValue];
     }
 
     //组件间的通讯方法
