@@ -2,13 +2,19 @@
  * element的属性处理
  *
  */
-import { memoize, testFuntion } from './tool';
+import { memoize } from '../tool';
+import ref from './ref';
+import className from './className';
+import on from './on';
 
 const tagReg = new Map();
 
-const allAttribute = {};
 //字母类属性值
-tagReg.set(/[a-zA-Z]+/, allAttribute);
+tagReg.set(/[a-zA-Z]+/, {
+  ref,
+  on,
+  class: className,
+});
 
 const getHandler = memoize(function (tagName, attrName) {
   for (let [reg, value] of tagReg.entries()) {
@@ -20,18 +26,11 @@ const getHandler = memoize(function (tagName, attrName) {
   return false;
 });
 
-//
-allAttribute.ref = function (element, attrValue) {
-  testFuntion(attrValue, 'The ref parameter must be a function');
-  //执行传入的函数
-  attrValue(element.ref);
-};
-
-export function testAttribute(element, attrName, attrValue) {
+export default function (element, attrName, attrValue) {
   const tagName = element.tagName;
   let handler = getHandler(tagName, attrName);
   if (handler) {
-    handler(element, attrValue);
+    handler(element, attrValue) === false;
     return true;
   } else {
     return false;

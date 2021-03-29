@@ -33,7 +33,6 @@
 
     const { Div, Button, Input, Hr } = TAG;
 
-
     //组件间的通讯方法
     const store = (function () {
       let obj = {
@@ -100,7 +99,7 @@
       let ref = createRef();
 
       //事件
-      function onclick() {
+      function onClick() {
         let data = getValue();
         send({ idx: data.idx + 1, flag: !data.flag });
       }
@@ -109,7 +108,7 @@
       //只能在这里获取数据,前面获取的数据因为作用域都为静态值
       return (data) =>
         Div({ title: props.title, ref }, [
-          slot[0] && Button({ onclick }, slot[0]),
+          slot[0] && Button({ onClick }, slot[0]),
           Div('this is the ' + data.idx + ' children.'),
           slot[1],
           !data.flag ? null : slot[2],
@@ -123,7 +122,15 @@
         console.log('unmouted occur');
       });
 
-      return () => Div('test componet slot');
+      return () =>
+        Div(
+          {
+            class: {
+              component: true,
+            },
+          },
+          'test componet slot'
+        );
     });
 
     /**

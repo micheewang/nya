@@ -1,6 +1,6 @@
 'use strict';
 
-import { testAttribute } from './attribute';
+import testAttribute from './attribute/index';
 import { Component, isComponent } from './component';
 import { $Element, isElement } from './element';
 import { current_node } from './instance';
@@ -103,9 +103,9 @@ function elementRender(parentNode) {
       ref[key] = value;
     }
     //事件 value为函数
-    else if (key.startsWith('on')) {
+    else if (/on[A-Z][a-zA-Z]+/.test(key)) {
       testFuntion(value);
-      ref.addEventListener(key.substr(2), value);
+      ref[key.toLowerCase()] = attrs[key];
     }
     //其他类型
     else {
