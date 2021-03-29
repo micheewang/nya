@@ -16,7 +16,9 @@ export function copy(v) {
     return v;
   }
 }
-
+export function warn(msg) {
+  console.warn(msg);
+}
 //合并函数为一个函数
 export function compose(...fns) {
   return function (...arg) {
@@ -36,7 +38,6 @@ export function memoize(fn) {
   memoize.cache = {};
   return memoize;
 }
-
 
 export function noop() {}
 

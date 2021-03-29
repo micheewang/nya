@@ -14,7 +14,7 @@ export class Store {
   }
 
   //主动发送给所有的组件
-  send() {
+  emit() {
     this.wants.forEach((d) => d());
   }
 
@@ -30,10 +30,10 @@ export class Store {
     testFuntion(receiver);
 
     //want
-    let want = () => {
+    let want = (...arg) => {
       this.responder((data) => {
         receiver(data);
-      });
+      }, ...arg);
     };
     let send = (data) => this.recipient(data);
     this.wants.add(want);

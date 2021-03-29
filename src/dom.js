@@ -44,21 +44,31 @@ function updateComponet({ timestamp, component }) {
   //卸载触发
   triggerEvents(oldVnode, 'unMouted');
   //当前组件更新
-  isFunction(component.update) && component.update();
+  triggerEventsFloor(component, 'update');
   //子组件全部触发mouted
   triggerEvents(newVnode, 'mouted');
 }
 
 //递归触发event
 function triggerEvents(node, eventName) {
+  let children = null;
   if (isComponent(node)) {
+    children = [node.vNode];
     isFunction(node[eventName]) && node[eventName]();
+  } else {
+    children = node.children;
   }
-  node.children.forEach((cNode) => {
+
+  children.forEach((cNode) => {
     if (isElement(cNode)) {
       triggerEvents(cNode, eventName);
     }
   });
+}
+function triggerEventsFloor(node, eventName) {
+  if (isComponent(node)) {
+    isFunction(node[eventName]) && node[eventName]();
+  }
 }
 
 /**
@@ -107,6 +117,10 @@ function elementRender(parentNode) {
    * 子元素渲染
    */
   for (let node of children) {
+    if (typeof node === 'function') {
+      node = node();
+    }
+
     //把这些值排除在外就可以方便的在数组里使用表达式
     if (node === undefined || node === null || node === '') {
       continue;
@@ -163,7 +177,7 @@ function componentRender(parentNode) {
   this.ref = elementRender.call(vNode, parentNode);
 
   //生命周期--挂载
-  isFunction(this.mouted) && this.mouted();
+  triggerEventsFloor(this, 'mouted');
 }
 
 function getVNode(component) {

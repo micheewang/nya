@@ -1,6 +1,6 @@
 import { addQueen } from './dom';
 import { getInstance } from './instance';
-import { compose, testFuntion } from './tool';
+import { compose, testFuntion, warn } from './tool';
 
 //数据hooks
 function useChapter(chapter) {
@@ -22,6 +22,9 @@ function useChapter(chapter) {
     addQueen(current);
   }
 
+  if (current.getter) {
+    warn('This component has registered the useChapter method, which will cause the previous method to be invalid.')
+  }
   current.getter = getter;
   return [getter, setter];
 }

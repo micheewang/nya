@@ -33,17 +33,6 @@
 
     const { Div, Button, Input, Hr } = TAG;
 
-    //自定义hooks
-    function useTruck(store) {
-      let [getValue, setValue] = useChapter();
-
-      let [want, send] = store.createTruck(setValue);
-      useUnMouted(function () {
-        store.unbind(want);
-      });
-
-      return [want, send, getValue, setValue];
-    }
 
     //组件间的通讯方法
     const store = (function () {
@@ -64,21 +53,33 @@
         function (data) {
           obj = data;
           //发送给所有的组件
-          this.send(obj);
+          this.emit(obj);
         }
       );
     })();
+
+    //自定义hooks
+    function useTruck(store) {
+      let [getValue, setValue] = useChapter();
+
+      let [want, send] = store.createTruck(setValue);
+      useUnMouted(function () {
+        store.unbind(want);
+      });
+
+      return [want, send, getValue, setValue];
+    }
 
     //创建一个新的虚拟节点集合
     const Component1 = createComponent(({ slot, props }) => {
       //这个函数会在实例化时执行一次
 
       //创建数据
-      let [getValue, setValue] = useChapter(/*{ idx: 0 }*/);
+      // let [getValue, setValue] = useChapter(/*{ idx: 0 }*/);
 
       //组件间的通讯方式
-      let [want, send] = store.createTruck(setValue);
-      want();
+      let [want, send, getValue] = useTruck(store);
+      want('divide');
 
       //生命周期挂载后
       useMouted(function () {
@@ -91,9 +92,9 @@
       });
 
       //生命周期卸载后
-      useUnMouted(function () {
-        store.unbind(want);
-      });
+      // useUnMouted(function () {
+      //   store.unbind(want);
+      // });
 
       //获取element对象,本质上是一个函数
       let ref = createRef();
