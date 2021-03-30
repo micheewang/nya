@@ -23,7 +23,10 @@ function useChapter(chapter) {
   }
 
   if (current.getter) {
-    warn('This component has registered the useChapter method, which will cause the previous method to be invalid.')
+    warn(
+      'This component has registered the useChapter method,' +
+        ' which will cause the previous method to be invalid.'
+    );
   }
   current.getter = getter;
   return [getter, setter];

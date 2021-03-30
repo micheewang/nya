@@ -16,9 +16,14 @@ export function copy(v) {
     return v;
   }
 }
-export function warn(msg) {
-  console.warn(msg);
-}
+
+export const [warn, error, log] = [
+  'warn',
+  'error',
+  'info',
+  'log',
+].map((v) => (...arg) => console[v](...arg));
+
 //合并函数为一个函数
 export function compose(...fns) {
   return function (...arg) {
@@ -64,29 +69,4 @@ export function insertChildByIdx(parent, node, idx = -1) {
 
 export function insertChild(parent, node, target) {
   parent.insertBefore(node, target);
-}
-//TODO
-// 数据的diff,用于值改变后通过对比依赖来获取需要改变的节点
-export function getDiff(obj1, obj2, path = []) {
-  let diff = [];
-  if (isNotObject(obj1) || isNotObject(obj2)) {
-    if (obj1 !== obj2) {
-      diff.push(path);
-    }
-  } else {
-    if (Array.isArray(obj1) && Array.isArray(obj2)) {
-      obj1.forEach((value, index) => {
-        let _path = path.concat(index);
-        let _diff = getDiff(value, obj2[index], _path);
-        diff = Array.prototype.concat.apply(_diff, diff);
-      });
-    } else {
-      for (const key in obj1) {
-        let _path = path.concat(key);
-        let _diff = getDiff(obj1[key], obj2[key], _path);
-        diff = Array.prototype.concat.apply(_diff, diff);
-      }
-    }
-  }
-  return diff;
 }
