@@ -1,14 +1,26 @@
-const { createComponent, useChapter, useMouted, useUnMouted, TAG } = nya;
+const {
+  createComponent,
+  useChapter,
+  useMouted,
+  useUnMouted,
+  useUpdate,
+  TAG,
+} = nya;
+
 const { Div } = TAG;
 
 export default createComponent(() => {
-  const [getData, setData] = useChapter(new Date().toTimeString());
+  const [getTime, setTime] = useChapter(new Date().toTimeString());
   let timer = null;
 
   useMouted(() => {
     setInterval(() => {
-      setData(new Date().toTimeString());
+      setTime(new Date().toTimeString());
     }, 1000);
+  });
+
+  useUpdate(() => {
+    document.title = getTime();
   });
 
   useUnMouted(() => {
