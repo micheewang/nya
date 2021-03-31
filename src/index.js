@@ -6,7 +6,7 @@ import { createRef } from './createRef';
 import { renderDOM } from './dom';
 import hooks from './hooks';
 
-window.nya = Object.assign(
+const nya = Object.assign(
   {
     renderDOM,
     createRef,
@@ -17,3 +17,7 @@ window.nya = Object.assign(
   },
   hooks
 );
+if (window) {
+  window.nya = nya;
+}
+export default nya;
