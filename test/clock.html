@@ -1,14 +1,19 @@
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="../dist/index.js"></script>
-  <title>helloWorld</title>
-</head>
-<body>
- <div id="root"></div> 
-</body>
-<script src="./js/clock/app.js" type="module"></script>
-<script src="./js/clock/clock.js" type="module"></script>
-</html
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="../dist/index.js"></script>
+    <title>clock</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+
+  <script type="module">
+    import Clock from './js/clock.js';
+    const { renderDOM } = nya;
+
+    renderDOM(Clock(), document.getElementById('root'));
+  </script>
+</html>
