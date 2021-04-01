@@ -56,9 +56,4 @@ function useUnMouted(callback) {
     : callback;
 }
 
-export default {
-  useChapter,
-  useMouted,
-  useUpdate,
-  useUnMouted,
-};
+export { useChapter, useMouted, useUpdate, useUnMouted };

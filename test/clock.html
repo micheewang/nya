@@ -3,7 +3,6 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="../dist/index.js"></script>
     <title>clock</title>
   </head>
   <body>
@@ -11,8 +10,8 @@
   </body>
 
   <script type="module">
-    import Clock from './js/clock.js';
-    const { renderDOM } = nya;
+    import Clock from './js/Clock.js';
+    import nya from '../dist/index.js';
 
     renderDOM(Clock(), document.getElementById('root'));
   </script>

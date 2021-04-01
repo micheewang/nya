@@ -24,6 +24,8 @@ export function addQueen(component) {
     }) === 1
   ) {
     //合并渲染
+    //notes:  运行在后台标签页或者隐藏的<iframe>里时，会被暂停调用以提升性能和电池寿命。
+    //https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame
     requestAnimationFrame(function () {
       while (renderQueen.length) {
         updateComponet(renderQueen.shift());

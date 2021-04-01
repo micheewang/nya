@@ -8,12 +8,8 @@
 
   <body>
     <div id="root"></div>
-  <script type="text/javascript" src="index.js"></script></body>
-  <script>
-    console.log(nya);
-
-    const {
-      //标签容器
+  <script type="module">
+    import {      //标签容器
       TAG,
 
       //渲染方法
@@ -29,7 +25,8 @@
       useMouted,
       useUpdate,
       useUnMouted,
-    } = nya;
+    } from './index.js' ;
+
 
     const { Div, Button, Input, Hr } = TAG;
 
