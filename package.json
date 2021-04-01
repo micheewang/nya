@@ -4,10 +4,10 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "dev:esm": "rollup --config ./build/rollup.config.js -f esm -w",
-    "build:esm": "rollup --config ./build/rollup.config.js -f esm",
-    "build:cjs": "rollup --config ./build/rollup.config.js -f cjs",
-    "build:umd": "rollup --config ./build/rollup.config.js -f umd"
+    "dev:esm": "rollup --config ./script/rollup.config.js -w --environment TARGET:esm",
+    "build:esm": "rollup --config ./script/rollup.config.js --environment TARGET:esm",
+    "build:cjs": "rollup --config ./script/rollup.config.js --environment TARGET:cjs",
+    "build:umd": "rollup --config ./script/rollup.config.js --environment TARGET:umd"
   },
   "author": "",
   "license": "ISC",
@@ -15,9 +15,7 @@
     "@babel/core": "^7.13.14",
     "@babel/plugin-external-helpers": "^7.12.13",
     "@babel/preset-env": "^7.13.12",
-    "babel-preset-latest": "^6.24.1",
     "rollup": "^2.44.0",
     "rollup-plugin-babel": "^4.4.0"
-  },
-  "dependencies": {}
+  }
 }
