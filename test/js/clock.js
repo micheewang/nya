@@ -1,11 +1,11 @@
-const {
+import {
   createComponent,
   useChapter,
   useMouted,
   useUnMouted,
   useUpdate,
   TAG,
-} = nya;
+} from '../../dist/index.esm.js';
 
 const { Div } = TAG;
 

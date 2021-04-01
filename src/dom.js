@@ -4,7 +4,7 @@ import testAttribute from './attribute/index';
 import { Component, isComponent } from './component';
 import { $Element, isElement } from './element';
 import { current_node } from './instance';
-import { isFunction, testFuntion } from './tool';
+import { error, isFunction, testFuntion } from './tool';
 
 /*
  * render queen
@@ -175,6 +175,13 @@ function componentRender(parentNode) {
 
   //执行vnode模板获取虚拟节点
   let vNode = (this.vNode = getVNode(this));
+
+  if (!isElement(vNode)) {
+    error(
+      'Creating a component must return a function that returns the virtual node'
+    );
+    return;
+  }
 
   this.ref = elementRender.call(vNode, parentNode);
 
