@@ -12,7 +12,7 @@ export default createComponent(() => {
       },
     ],
     step: 0,
-    status,
+    winner: null,
     xIsNext: true,
   });
 
@@ -20,33 +20,33 @@ export default createComponent(() => {
   const handler = (i) => {
     //获取当前状态
     const state = getState();
+    if (state.winner) {
+      return;
+    }
     const history = state.history.slice();
     const current = history[0];
     const squares = current.squares.slice();
-
-    const winner = calculateWinner(current.squares);
-
-    let status;
-    if (winner) {
-      status = 'Winner: ' + winner;
-    } else {
-      status = 'Next player: ' + (state.xIsNext ? 'X' : 'O');
+    if (squares[i] !== null) {
+      return;
     }
-    squares[i] = state.xIsNext ? 'X' : 'O';
 
+    squares[i] = state.xIsNext ? 'X' : 'O';
     history.unshift({ squares });
+
+    const winner = calculateWinner(history[0].squares);
+
     //修改数据
     setState({
       history,
-      status,
+      winner,
       step: 0,
       xIsNext: !state.xIsNext,
     });
   };
 
-  //跳转
-  const moves = () =>
-    getState().history.map((move, step) => {
+  //历史列表
+  const moves = () => {
+    return getState().history.map((move, step) => {
       const desc = step ? 'Go to move #' + step : 'Go to game start';
       return Li([
         Button(
@@ -59,9 +59,14 @@ export default createComponent(() => {
         ),
       ]);
     });
+  };
+
+  //跳转
   const jumpTo = (move) => {
     let state = getState();
-    setState(Object.assign({}, state, { step: state.history.length - move - 1 }));
+    setState(
+      Object.assign({}, state, { step: state.history.length - move - 1 })
+    );
   };
 
   return (state) =>
@@ -75,12 +80,17 @@ export default createComponent(() => {
       ]),
       Div({ class: 'game-info' }, [
         //获胜box
-        Div(status),
+        Div(
+          state.winner
+            ? `Winner: ${state.winner}`
+            : `Next player: ${state.xIsNext ? 'X' : 'O'}`
+        ),
         Ol(moves()),
       ]),
     ]);
 });
 
+//判断胜利条件
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
