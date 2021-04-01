@@ -1,4 +1,5 @@
 import babel from 'rollup-plugin-babel';
+import { terser } from 'rollup-plugin-terser';
 
 // rollup.config.js
 function getConfig(format) {
@@ -13,6 +14,7 @@ function getConfig(format) {
       babel({
         exclude: 'node_modules/**', // 只编译我们的源代码
       }),
+      terser(),
     ],
   };
 }
