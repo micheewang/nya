@@ -1,10 +1,11 @@
 //TODO
 // 0. 在渲染前收集数据依赖
 // 1. 根据前后数据diff,来判断是否diff某节点
-// 2. 判断是否为
+// 2. 通过特征值来获取节点? 或者按照vue? (待验证)
+
 
 //数据的diff,用于值改变后通过对比依赖来获取需要改变的节点
-export function getDiff(obj1, obj2, path = []) {
+function getDiff(obj1, obj2, path = []) {
   let diff = [];
   if (isNotObject(obj1) || isNotObject(obj2)) {
     if (obj1 !== obj2) {
@@ -26,4 +27,8 @@ export function getDiff(obj1, obj2, path = []) {
     }
   }
   return diff;
+}
+
+export function diff(oldVNode, newVNode) {
+
 }

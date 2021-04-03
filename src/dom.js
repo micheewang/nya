@@ -189,6 +189,7 @@ function componentRender(parentNode) {
   triggerEventsFloor(this, 'mouted');
 }
 
+//TODO 通过proxy收集依赖
 function getVNode(component) {
   if (component.templet) {
     if (component.getter) {

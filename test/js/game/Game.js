@@ -85,6 +85,7 @@ export default createComponent(() => {
             ? `Winner: ${state.winner}`
             : `Next player: ${state.xIsNext ? 'X' : 'O'}`
         ),
+        'history:',
         Ol(moves()),
       ]),
     ]);

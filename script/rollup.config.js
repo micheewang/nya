@@ -7,6 +7,7 @@ function getConfig(format) {
     input: 'src/index.js',
     output: {
       file: `./dist/index.${format}.js`,
+      // sourcemap: true,
       format,
       name: 'nya',
     },
