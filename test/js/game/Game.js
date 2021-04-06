@@ -26,13 +26,17 @@ export default createComponent(() => {
     const history = state.history.slice();
     const current = history[0];
     const squares = current.squares.slice();
+
+    //棋盘已经有落子
     if (squares[i] !== null) {
       return;
     }
 
+    //当前player
     squares[i] = state.xIsNext ? 'X' : 'O';
     history.unshift({ squares });
 
+    //胜者
     const winner = calculateWinner(history[0].squares);
 
     //修改数据
@@ -61,7 +65,7 @@ export default createComponent(() => {
     });
   };
 
-  //跳转
+  //跳转至历史
   const jumpTo = (move) => {
     let state = getState();
     setState(
@@ -72,14 +76,14 @@ export default createComponent(() => {
   return (state) =>
     Div({ class: 'game' }, [
       Div({ class: 'game-board' }, [
-        //实例
+        //期盘
         Board({
           squares: state.history[state.step].squares,
           onClick: (i) => handler(i),
         }),
       ]),
       Div({ class: 'game-info' }, [
-        //获胜box
+        //信息
         Div(
           state.winner
             ? `Winner: ${state.winner}`

@@ -14,7 +14,7 @@ export default createComponent(() => {
   let timer = null;
 
   useMouted(() => {
-    setInterval(() => {
+    timer = setInterval(() => {
       setTime(new Date().toTimeString());
     }, 1000);
   });
@@ -24,7 +24,9 @@ export default createComponent(() => {
   });
 
   useUnMouted(() => {
-    clearInterval(timer);
+    if (timer !== null) {
+      clearInterval(timer);
+    }
   });
 
   return (time) => Div({ class: 'clock' }, [time]);
