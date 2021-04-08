@@ -8,7 +8,7 @@
 // new $Element('div',{},['test'])
 // new $Element('div',{},'test')
 export class $Element {
-  constructor(tagName, attrs, children ) {
+  constructor(tagName, attrs, children) {
     if (typeof attrs === 'string' || isElement(attrs)) {
       children = [attrs];
       attrs = {};
@@ -45,7 +45,7 @@ export function createElement(tagName, attrs, children) {
 }
 
 //柯里化
-export const TAG = Proxy
+export const TAG = window.Proxy
   ? new Proxy(
       {},
       {
