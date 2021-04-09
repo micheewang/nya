@@ -1,23 +1,27 @@
-import babel from 'rollup-plugin-babel';
-import { terser } from 'rollup-plugin-terser';
+import plugBabel from 'rollup-plugin-babel';
+import { terser as plugTerser } from 'rollup-plugin-terser';
 
-// rollup.config.js
-function getConfig(format) {
+const babel = plugBabel({ exclude: 'node_modules/**' });
+const terser = plugTerser();
+
+const config = {
+  esmw: ['esm', [], true],
+  esm: ['esm', [terser], false],
+  umd: ['umd', [babel, terser], false],
+  cjs: ['cjs', [babel, terser], false],
+};
+
+function getRollupConfig(format, plugins, sourcemap) {
   return {
     input: 'src/index.js',
     output: {
       file: `./dist/index.${format}.js`,
-      // sourcemap: true,
+      sourcemap,
       format,
       name: 'nya',
     },
-    plugins: [
-      babel({
-        exclude: 'node_modules/**', // 只编译我们的源代码
-      }),
-      terser(),
-    ],
+    plugins,
   };
 }
 
-export default getConfig(process.env.TARGET);
+export default getRollupConfig(...config[process.env.TARGET]);
