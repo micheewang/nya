@@ -1,21 +1,21 @@
-import { noop, testFuntion } from './tool';
+import { testFuntion, warn } from './tool';
 
 // 组件间的数据通信,只管运输,不管储存
 // 是一个仓库一对多组件的形式
 // 只能有一个提供者,但可以有多个接收者
 // 提供者也可以作为接受者
 export class Store {
-  constructor(responder, recipient) {
-    testFuntion(responder);
+  constructor(request, response) {
+    testFuntion(request);
 
-    this.responder = responder;
-    this.recipient = recipient || noop;
+    this.request = request;
+    this.response = response;
     this.wants = new Set();
   }
 
   //主动发送给所有的组件
   emit() {
-    this.wants.forEach((d) => d());
+    this.wants.forEach((want) => want());
   }
 
   //解绑
@@ -26,16 +26,33 @@ export class Store {
   }
 
   //创建want|send
-  createTruck(receiver) {
+  createBranch(receiver) {
     testFuntion(receiver);
 
     //want
-    let want = (...arg) => {
-      this.responder((data) => {
-        receiver(data);
-      }, ...arg);
+    const want = () => {
+      this.request(orign, orign.from);
     };
-    let send = (data) => this.recipient(data);
+
+    //send
+    const send = (data) => {
+      if (this.response) {
+        this.response(data, orign.from);
+      } else {
+        warn('The store has no function to receive this parameter');
+      }
+    };
+
+    //传递给request函数的参数
+    function orign(data) {
+      receiver(data);
+    }
+
+    //监控来源
+    orign.from = function () {
+      return { receiver, want, send };
+    };
+
     this.wants.add(want);
     return [want, send];
   }

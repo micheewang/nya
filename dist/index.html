@@ -37,16 +37,12 @@
         flag: true,
       };
       return createStore(
-        //responder
-        //某组件want时触发
         function (send) {
           //async
           send(obj);
+          console.log(send.from());
         },
-
-        //receiver
-        //某组件send时触发
-        function (data) {
+        function (data,send) {
           obj = data;
           //发送给所有的组件
           this.emit(obj);
@@ -58,7 +54,7 @@
     function useTruck(store) {
       let [getValue, setValue] = useChapter();
 
-      let [want, send] = store.createTruck(setValue);
+      let [want, send] = store.createBranch(setValue);
       useUnMouted(function () {
         store.unbind(want);
       });
