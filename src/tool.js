@@ -52,6 +52,19 @@ export function testFuntion(a, msg) {
   }
 }
 
+//https://v8.dev/blog/system-analyzer
+export function transformFastObject(obj) {
+  if (obj === Object(obj)) {
+    var a = function () {};
+    a.prototype = obj;
+    new a();
+    new a();
+    return obj;
+  } else {
+    throw new Error('Argument must be of object type');
+  }
+}
+
 export function isFunction(f) {
   return typeof f === 'function';
 }

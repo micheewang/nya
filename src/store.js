@@ -1,4 +1,4 @@
-import { testFuntion, warn } from './tool';
+import { isFunction, testFuntion, warn } from './tool';
 
 // 组件间的数据通信,只管运输,不管储存
 // 是一个仓库一对多组件的形式
@@ -36,7 +36,7 @@ export class Store {
 
     //send
     const send = (data) => {
-      if (this.response) {
+      if (isFunction(this.response)) {
         this.response(data, orign.from);
       } else {
         warn('The store has no function to receive this parameter');
