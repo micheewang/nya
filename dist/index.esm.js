@@ -1,1 +1,565 @@
-class t{constructor(t,n,r){"string"==typeof n||e(n)?(r=[n],n={}):Array.isArray(n)&&(r=n,n={}),n=n||{},r=r?Array.isArray(r)?r:[r]:[],this.tagName=t,this.ref=null,this.mark=[],this.attrs=n,this.children=r}}function e(e){return e instanceof t}function n(e,n,r){return new t(e,n,r)}const r=window.Proxy?new Proxy({},{get:(e,n)=>(e.hasOwnProperty(n)||(e[n]=function(e,r){return new t(n,e,r)}),e[n])}):function(){const e={};return"html,body,base,head,link,meta,style,title,address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section,div,dd,dl,dt,figcaption,figure,picture,hr,img,li,main,ol,p,pre,ul,a,b,abbr,bdi,bdo,br,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,rtc,ruby,s,samp,small,span,strong,sub,sup,time,u,let,wbr,area,audio,map,track,video,embed,object,param,source,canvas,script,noscript,del,ins,caption,col,colgroup,table,thead,tbody,td,th,tr,button,datalist,fieldset,form,input,label,legend,meter,optgroup,option,output,progress,select,textarea,details,dialog,menu,menuitem,summary,content,element,shadow,template,blockquote,iframe,tfoot".split(",").forEach((n=>{e[n.slice(0,1).toUpperCase()+n.slice(1)]=function(e,r){return new t(n,e,r)}})),e}(),[o,i,s]=["warn","error","info","log"].map((t=>(...e)=>console[t](...e)));function u(...t){return function(...e){t.forEach((t=>t.call(this,...e)))}}function a(t,e){if(!c(t))throw new TypeError(e||"Parameter must be a function.")}function c(t){return"function"==typeof t}class l extends t{constructor(t,e,n,r){super(t,e,n),this.const=r,this.templet=null,this.vNode=null,this.parentNode=null,this.getter=null,this.mouted=null,this.update=null,this.unMouted=null}}function f(t){return t instanceof l}function h(t){return a(t),function(...t){const e=Symbol("Component");return function(n,r){return new l(e,n,r,...t)}}(t)}class d{constructor(t,e){a(t),this.request=t,this.response=e,this.wants=new Set}emit(){this.wants.forEach((t=>t()))}unbind(t){this.wants.has(t)&&this.wants.delete(t)}createBranch(t){a(t);const e=()=>{this.request(r,r.from)},n=t=>{c(this.response)?this.response(t,r.from):o("The store has no function to receive this parameter")};function r(e){t(e)}return r.from=function(){return{receiver:t,want:e,send:n}},this.wants.add(e),[e,n]}}function p(...t){return new d(...t)}function m(){return function t(e){t.current=e}}const w=new Map;w.set(/[a-zA-Z]+/,{ref:function(t,e){a(e,"The ref parameter must be a function"),e(t.ref)},on:function(t,e){let n=t.ref;for(let t in e)n.addEventListener(t,e[t])},class:function(t,e){var n=t.ref;if("string"===typeof e)n.classList=e;else{let t=[];if(Array.isArray(e))t=e;else for(let n in e)e[n]&&t.push(n);n.classList=t.join(" ")}}});const b=function(t){var e=function(...n){var r=e.cache,o=n.join(",");return Object.hasOwnProperty.call(r,o)||(r[o]=t.apply(this,n)),r[o]};return e.cache={},e}((function(t,e){for(let[n,r]of w.entries())if(n.test(t)&&r[e])return r[e];return!1}));function g(t,e,n){const r=t.tagName;let o=b(r,e);return!!o&&(o(t,n),!0)}const y={current:null};function v(t){let e=y.current;if(!e)throw new Error(t||"hooks must be called inside Component");return e}const N=[];function A({timestamp:t,component:e}){let n=e.vNode,r=T(e),o=x.call(r);e.vNode=r,e.parentNode.replaceChild(o,e.ref),e.ref=o,C(n,"unMouted"),E(e,"update"),C(r,"mouted")}function C(t,n){let r=null;f(t)?(r=[t.vNode],c(t[n])&&t[n]()):r=t.children,r.forEach((t=>{e(t)&&C(t,n)}))}function E(t,e){f(t)&&c(t[e])&&t[e]()}function k(t,n){if(f(t))M.call(t,n);else{if(!e(t))throw new Error("The root element must mount the component.");x.call(t,n)}}function x(t){let{tagName:n,attrs:r,children:o}=this;const i=this.ref=document.createElement(n);for(let t in r){const e=r[t];g(this,t,e)||("boolean"==typeof e?i[t]=e:/on[A-Z][a-zA-Z]+/.test(t)?(a(e),i[t.toLowerCase()]=r[t]):i.setAttribute(t,e))}for(let t of o)if("function"==typeof t&&(t=t()),null!=t&&""!==t)if(e(t))f(t)?M.call(t,i):x.call(t,i);else{let e=document.createTextNode(String(t));i.appendChild(e)}return t&&t.appendChild(i),i}function M(t){if(this.parentNode=t,null===this.templet){y.current=this;let t={props:this.attrs,slot:this.children};a(this.templet=this.const(t),"Creating a component must return a function that returns the virtual node"),y.current=null}let n=this.vNode=T(this);e(n)?(this.ref=x.call(n,t),E(this,"mouted")):i("Creating a component must return a function that returns the virtual node")}function T(t){if(t.templet)return t.getter?t.templet(t.getter()):t.templet()}function q(t){let e=v(),n=t;function r(){return n}return e.getter&&o("This component has registered the useChapter method, which will cause the previous method to be invalid."),e.getter=r,[r,function(t){var r;n=t,r=e,1===N.push({timestamp:+new Date,component:r})&&requestAnimationFrame((function(){for(;N.length;)A(N.shift())}))}]}function P(t){a(t);let e=v();e.mouted=e.mouted?u(e.mouted,t):t}function j(t){a(t);let e=v();e.update=e.update?u(e.update,t):t}function L(t){a(t);let e=v();e.unMouted=e.unMouted?u(e.unMouted,t):t}export{r as TAG,h as createComponent,n as createElement,m as createRef,p as createStore,k as renderDOM,q as useChapter,P as useMouted,L as useUnMouted,j as useUpdate};
+// 基本虚拟节点
+// new $Element('div')
+// new $Element('div','test')
+// new $Element('div',['test'])
+// new $Element('div',{})
+// new $Element('div',{},['test'])
+// new $Element('div',{},'test')
+class $Element {
+  constructor(tagName, attrs, children) {
+    if (typeof attrs === 'string' || isElement(attrs)) {
+      children = [attrs];
+      attrs = {};
+    } else if (Array.isArray(attrs)) {
+      children = attrs;
+      attrs = {};
+    }
+
+    attrs = attrs || {};
+    children = children
+      ? Array.isArray(children)
+        ? children
+        : [children]
+      : [];
+
+    this.tagName = tagName;
+    //dom实例
+    this.ref = null;
+
+    //runtime optimization
+    this.mark = [];
+    this.attrs = attrs;
+    this.children = children;
+  }
+}
+
+function isElement(con) {
+  return con instanceof $Element;
+}
+
+function createElement(tagName, attrs, children) {
+  let con = new $Element(tagName, attrs, children);
+  return con;
+}
+
+//柯里化
+const TAG = window.Proxy
+  ? new Proxy(
+      {},
+      {
+        get(obj, prop) {
+          if (!obj.hasOwnProperty(prop)) {
+            obj[prop] = function (attrs, children) {
+              return new $Element(prop, attrs, children);
+            };
+          }
+          return obj[prop];
+        },
+      }
+    )
+  : (function () {
+      const contain = {};
+      const htmlTag = (
+        'html,body,base,head,link,meta,style,title,' +
+        'address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section,' +
+        'div,dd,dl,dt,figcaption,figure,picture,hr,img,li,main,ol,p,pre,ul,' +
+        'a,b,abbr,bdi,bdo,br,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,rtc,ruby,' +
+        's,samp,small,span,strong,sub,sup,time,u,let,wbr,area,audio,map,track,video,' +
+        'embed,object,param,source,canvas,script,noscript,del,ins,' +
+        'caption,col,colgroup,table,thead,tbody,td,th,tr,' +
+        'button,datalist,fieldset,form,input,label,legend,meter,optgroup,option,' +
+        'output,progress,select,textarea,' +
+        'details,dialog,menu,menuitem,summary,' +
+        'content,element,shadow,template,blockquote,iframe,tfoot'
+      ).split(',');
+      htmlTag.forEach((tagName) => {
+        contain[
+          tagName.slice(0, 1).toUpperCase() + tagName.slice(1)
+        ] = function (attrs, children) {
+          return new $Element(tagName, attrs, children);
+        };
+      });
+      return contain;
+    })();
+
+const [warn, error, log] = [
+  'warn',
+  'error',
+  'info',
+  'log',
+].map((v) => (...arg) => console[v](...arg));
+
+//合并函数为一个函数
+function compose(...fns) {
+  return function (...arg) {
+    fns.forEach((fn) => fn.call(this, ...arg));
+  };
+}
+
+function memoize(fn) {
+  var memoize = function (...args) {
+    var cache = memoize.cache;
+    var address = args.join(',');
+    if (!Object.hasOwnProperty.call(cache, address)) {
+      cache[address] = fn.apply(this, args);
+    }
+    return cache[address];
+  };
+  memoize.cache = {};
+  return memoize;
+}
+
+function testFuntion(a, msg) {
+  if (!isFunction(a)) {
+    throw new TypeError(msg || 'Parameter must be a function.');
+  }
+}
+
+function isFunction(f) {
+  return typeof f === 'function';
+}
+
+//extends $Element
+//keep Component and $Element(name | attrs | children) the same behavior
+class Component extends $Element {
+  constructor(tagName, props, slot, $const) {
+    super(tagName, props, slot);
+
+    //外层逻辑函数
+    this.const = $const;
+    //内层虚拟节点模板函数
+    this.templet = null;
+    this.vNode = null;
+    this.parentNode = null;
+
+    //data getter
+    this.getter = null;
+
+    //lifecycle
+    this.mouted = null;
+    this.update = null;
+    this.unMouted = null;
+    //....
+  }
+}
+
+function composeArgs(...args) {
+  //These component belong to one type.
+  const name = Symbol('Component');
+  return function (props, slot) {
+    return new Component(name, props, slot, ...args);
+  };
+}
+
+function isComponent(con) {
+  return con instanceof Component;
+}
+
+function createComponent(f) {
+  testFuntion(f);
+  return composeArgs(f);
+}
+
+// 组件间的数据通信,只管运输,不管储存
+// 是一个仓库一对多组件的形式
+// 只能有一个提供者,但可以有多个接收者
+// 提供者也可以作为接受者
+class Store {
+  constructor(request, response) {
+    testFuntion(request);
+
+    this.request = request;
+    this.response = response;
+    this.wants = new Set();
+  }
+
+  //主动发送给所有的组件
+  emit() {
+    this.wants.forEach((want) => want());
+  }
+
+  //解绑
+  unbind(want) {
+    if (this.wants.has(want)) {
+      this.wants.delete(want);
+    }
+  }
+
+  //创建want|send
+  createBranch(receiver) {
+    testFuntion(receiver);
+
+    //want
+    const want = () => {
+      this.request(orign, orign.from);
+    };
+
+    //send
+    const send = (data) => {
+      if (isFunction(this.response)) {
+        this.response(data, orign.from);
+      } else {
+        warn('The store has no function to receive this parameter');
+      }
+    };
+
+    //传递给request函数的参数
+    function orign(data) {
+      receiver(data);
+    }
+
+    //监控来源
+    orign.from = function () {
+      return { receiver, want, send };
+    };
+
+    this.wants.add(want);
+    return [want, send];
+  }
+}
+
+function createStore(...args) {
+  return new Store(...args);
+}
+
+//createRef
+function createRef() {
+  // 
+  return function f(ref) {
+    f.current = ref;
+  };
+}
+
+function ref (element, attrValue) {
+  testFuntion(attrValue, 'The ref parameter must be a function');
+  //执行传入的函数
+  attrValue(element.ref);
+}
+
+function className (element, value) {
+  var ref = element.ref;
+  let type = typeof value;
+  if (type === 'string') {
+    ref.classList = value;
+  } else {
+    let list = [];
+    if (Array.isArray(value)) {
+      list = value;
+    } else {
+      for (let i in value) {
+        if (value[i]) {
+          list.push(i);
+        }
+      }
+    }
+
+    ref.classList = list.join(' ');
+  }
+}
+
+function on (element, value) {
+  let ref = element.ref;
+  for (let i in value) {
+    ref.addEventListener(i, value[i]);
+  }
+}
+
+/**
+ * element的属性处理
+ *
+ */
+
+const tagReg = new Map();
+
+//字母类属性值
+tagReg.set(/[a-zA-Z]+/, {
+  ref,
+  on,
+  class: className,
+});
+
+const getHandler = memoize(function (tagName, attrName) {
+  for (let [reg, value] of tagReg.entries()) {
+    //正则匹配
+    if (reg.test(tagName) && value[attrName]) {
+      return value[attrName];
+    }
+  }
+  return false;
+});
+
+function testAttribute (element, attrName, attrValue) {
+  const tagName = element.tagName;
+  let handler = getHandler(tagName, attrName);
+  if (handler) {
+    handler(element, attrValue) === false;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+//当前的活动组件
+const current_node = {
+  current: null,
+};
+
+//获取当前的活动组件
+function getInstance(errorMessage) {
+  let current = current_node.current;
+  if (!current) {
+    throw new Error(errorMessage || 'hooks must be called inside Component');
+  }
+  return current;
+}
+
+/*
+ * render queen
+ * type = Array<{timestamp: number, component: Component, skip: boolean}>
+ */
+const renderQueen = [];
+
+/**
+ *
+ * @param {Component} component
+ */
+function addQueen(component) {
+  if (
+    renderQueen.push({
+      timestamp: +new Date(),
+      component,
+    }) === 1
+  ) {
+    //合并渲染
+    //notes:  运行在后台标签页或者隐藏的<iframe>里时，会被暂停调用以提升性能和电池寿命。
+    //https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame
+    requestAnimationFrame(function () {
+      while (renderQueen.length) {
+        updateComponet(renderQueen.shift());
+      }
+    });
+  }
+}
+
+function updateComponet({ timestamp, component }) {
+  // TODO 加入diff | filber
+  let oldVnode = component.vNode;
+  let newVnode = getVNode(component);
+  let el = elementRender.call(newVnode);
+  component.vNode = newVnode;
+
+  component.parentNode.replaceChild(el, component.ref);
+  component.ref = el;
+  //卸载触发
+  triggerEvents(oldVnode, 'unMouted');
+  //当前组件更新
+  triggerEventsFloor(component, 'update');
+  //子组件全部触发mouted
+  triggerEvents(newVnode, 'mouted');
+}
+
+//递归触发event
+function triggerEvents(node, eventName) {
+  let children = null;
+  if (isComponent(node)) {
+    children = [node.vNode];
+    isFunction(node[eventName]) && node[eventName]();
+  } else {
+    children = node.children;
+  }
+
+  children.forEach((cNode) => {
+    if (isElement(cNode)) {
+      triggerEvents(cNode, eventName);
+    }
+  });
+}
+function triggerEventsFloor(node, eventName) {
+  if (isComponent(node)) {
+    isFunction(node[eventName]) && node[eventName]();
+  }
+}
+
+/**
+ * main function
+ * @param {$Element | Component} element
+ */
+function renderDOM(element, root) {
+  if (isComponent(element)) {
+    componentRender.call(element, root);
+  } else if (isElement(element)) {
+    elementRender.call(element, root);
+  } else {
+    throw new Error(`The root element must mount the component.`);
+  }
+}
+
+/**
+ * vnode => element
+ */
+function elementRender(parentNode) {
+  let { tagName, attrs, children } = this;
+  const ref = (this.ref = document.createElement(tagName));
+
+  for (let key in attrs) {
+    const value = attrs[key];
+    //属性匹配/设置函数
+    if (testAttribute(this, key, value)) {
+      continue;
+    }
+    //boolean值直接赋值readOnly等
+    if (typeof value === 'boolean') {
+      ref[key] = value;
+    }
+    //事件 value为函数
+    else if (/on[A-Z][a-zA-Z]+/.test(key)) {
+      testFuntion(value);
+      ref[key.toLowerCase()] = attrs[key];
+    }
+    //其他类型
+    else {
+      ref.setAttribute(key, value);
+    }
+  }
+
+  /**
+   * 子元素渲染
+   */
+  for (let node of children) {
+    if (typeof node === 'function') {
+      node = node();
+    }
+
+    //把这些值排除在外就可以方便的在数组里使用表达式
+    if (node === undefined || node === null || node === '') {
+      continue;
+    }
+    //由于继承关系有可能是element,也可能是component
+    if (isElement(node)) {
+      if (isComponent(node)) {
+        componentRender.call(node, ref);
+      } else {
+        elementRender.call(node, ref);
+      }
+    } else {
+      //为本节点
+      let textNode = document.createTextNode(String(node));
+      ref.appendChild(textNode);
+    }
+  }
+
+  if (parentNode) {
+    parentNode.appendChild(ref);
+  }
+  return ref;
+}
+
+/**
+ * vnode组件渲染
+ */
+function componentRender(parentNode) {
+  //不传parentNode就可以使用上次的保存的值
+  this.parentNode = parentNode;
+
+  //vnode模板函数为空时,执行
+  if (this.templet === null) {
+    //设置当前的节点为活动节点
+    current_node.current = this;
+    //组件的props和slot
+    let renderData = {
+      props: this.attrs,
+      slot: this.children,
+    };
+    //const指的传入createComponent的函数,里面使用的hooks就可以指向当前的节点
+    let templet = (this.templet = this.const(renderData));
+    testFuntion(
+      templet,
+      'Creating a component must return a function that returns the virtual node'
+    );
+    //清空当前节点
+    current_node.current = null;
+  }
+
+  //执行vnode模板获取虚拟节点
+  let vNode = (this.vNode = getVNode(this));
+
+  if (!isElement(vNode)) {
+    error(
+      'Creating a component must return a function that returns the virtual node'
+    );
+    return;
+  }
+
+  this.ref = elementRender.call(vNode, parentNode);
+
+  //生命周期--挂载
+  triggerEventsFloor(this, 'mouted');
+}
+
+//TODO 通过proxy收集依赖
+function getVNode(component) {
+  if (component.templet) {
+    if (component.getter) {
+      return component.templet(component.getter());
+    } else {
+      return component.templet();
+    }
+  }
+}
+
+//数据hooks
+function useChapter(chapter) {
+  //获取当前active的虚拟节点
+  let current = getInstance();
+  //局部变量保存值
+  let currentData = chapter;
+
+  //getter
+  function getter() {
+    return currentData;
+  }
+
+  //setter
+  function setter(value) {
+    //缓存新值
+    currentData = value;
+    //添加至渲染队列
+    addQueen(current);
+  }
+
+  if (current.getter) {
+    warn(
+      'This component has registered the useChapter method,' +
+        ' which will cause the previous method to be invalid.'
+    );
+  }
+  current.getter = getter;
+  return [getter, setter];
+}
+
+function useMouted(callback) {
+  testFuntion(callback);
+  let current = getInstance();
+  current.mouted = current.mouted
+    ? compose(current.mouted, callback)
+    : callback;
+}
+
+function useUpdate(callback) {
+  testFuntion(callback);
+  let current = getInstance();
+  current.update = current.update
+    ? compose(current.update, callback)
+    : callback;
+}
+
+function useUnMouted(callback) {
+  testFuntion(callback);
+  let current = getInstance();
+  current.unMouted = current.unMouted
+    ? compose(current.unMouted, callback)
+    : callback;
+}
+
+export { TAG, createComponent, createElement, createRef, createStore, renderDOM, useChapter, useMouted, useUnMouted, useUpdate };
+//# sourceMappingURL=index.esm.js.map

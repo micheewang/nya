@@ -13,7 +13,7 @@ const config = {
 
 function getRollupConfig(format, plugins, sourcemap) {
   return {
-    input: 'src/index.js',
+    input: 'src/index.ts',
     output: {
       file: `./dist/index.${format}.js`,
       sourcemap,
