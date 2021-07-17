@@ -44,7 +44,6 @@ export function memoize(fn) {
   return memoize;
 }
 
-export function noop() {}
 
 export function testFuntion(a, msg) {
   if (!isFunction(a)) {

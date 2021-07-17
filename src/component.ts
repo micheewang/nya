@@ -2,14 +2,14 @@
 
 import { testFuntion } from './tool';
 
-const NYA_COMPOENT = Symbol('Nya.Component');
+const NYA_COMPONENT = Symbol('nya.component');
 
 type Getter = () => any;
-type Lifecycle = () => void;
-type Const = () => void;
+export type Lifecycle = () => void;
+export type Const = () => void;
 
 export interface Component {
-  type: typeof NYA_COMPOENT;
+  type: typeof NYA_COMPONENT;
   props: ComponentCreaterProps;
   children: any;
 
@@ -35,7 +35,7 @@ export function ComponentCreater(
   children: any
 ): Component {
   return {
-    type: NYA_COMPOENT,
+    type: NYA_COMPONENT,
     $const,
     children,
     props,
